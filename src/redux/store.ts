@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { rootReducer } from "./features/rootReducer";
 
 export const store = configureStore({
-  reducer: {},
-  devTools: process.env.NODE_ENV !== "production",
+  reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
