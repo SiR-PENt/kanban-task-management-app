@@ -1,5 +1,5 @@
 import ReactModal from 'react-modal';
-import { useState } from 'react';
+import { useTheme } from "next-themes";
 
 interface ModalProps {
     children?: React.ReactNode,
@@ -11,6 +11,7 @@ interface ModalProps {
   
   export default function Modal({ children, isOpen, onRequestClose}: ModalProps) {
   
+     const { theme, } = useTheme()
 
     const modalStyle = {
         overlay: {
@@ -20,15 +21,26 @@ interface ModalProps {
           justifyContent: "center",
           alignItems: "center",
         },
+        content: {
+          top: '12.5rem',
+          left: '47%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+          padding: '0px',
+          borderRadius: '.5rem',
+          backgroundColor: (theme === 'light') ? '#fff' : '#2B2C37',
+          border: 'none'
+        },
       };
-      
   
     return (
 
         <ReactModal
         onRequestClose={onRequestClose}
         isOpen={isOpen}
-          style={modalStyle}>
+        style={modalStyle}>
           {children}
         </ReactModal>
     );

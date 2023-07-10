@@ -5,29 +5,24 @@ import chevronDown from '../../../public/icon-chevron-down.svg'
 import addTask from '../../../public/icon-add-task-mobile.svg'
 import ellipsis from '../../../public/icon-vertical-ellipsis.svg'
 import Image from 'next/image'
-import Modal from './Modals/Modal'
-import { useState } from 'react'
+import NavModal from './Modals/NavModal'
+import { useAppDispatch, } from '@/components/redux/hooks'
+import { openNavModal, } from '@/components/redux/features/modalSlice'
 
 export default function Navbar() {
 
-    const [ isOpen, setIsOpen ] = useState<boolean>(false);
-
-    function openModal() {
-      setIsOpen(true);
-    }
-  
-    function closeModal() {
-      setIsOpen(false);
-    }
+   const dispatch = useAppDispatch()
+   const openModal = () => dispatch(openNavModal()) 
 
     return (
 
         <nav className='dark:bg-dark-grey flex h-[4rem] items-center px-4 justify-between'>
-
             <div className='flex space-x-4'>
             <Image src={logo} alt='logo' className='object-contain'/>
 
-            <div className='flex space-x-2 items-center'>
+            <div 
+             onClick={openModal}
+            className='flex space-x-2 items-center cursor-pointer'>
             <p className='text-black dark:text-white text-xl font-bold'>Platform Launch</p>
             <Image src={chevronDown} alt='chevron-down' className='object-contain'/>
             </div>
@@ -35,7 +30,6 @@ export default function Navbar() {
 
             <div className='flex items-center space-x-3'>
             <button 
-            onClick={openModal}
             className='bg-main-purple px-4 py-2 rounded-2xl'>
             <Image src={addTask} alt='icon-add-task'/>
             </button>
@@ -43,7 +37,7 @@ export default function Navbar() {
             <Image src={ellipsis} alt='icon-vertical-ellipsis'/>
             </button>
             </div>
-            <Modal isOpen={isOpen} onRequestClose={closeModal}/>
+            <NavModal/>
         </nav>
     )
 }

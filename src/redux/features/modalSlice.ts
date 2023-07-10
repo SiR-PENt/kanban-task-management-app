@@ -14,21 +14,18 @@ export const modals = createSlice({
   initialState,
   reducers: {
 
-    reset: () => initialState,
-
     openNavModal: (state) => {
         state.navModal = true
+        console.log(state.navModal)
     },
 
     closeNavModal: (state) => {
         state.navModal = false
     },
-
   },
 });
 
 export const {
-  reset,
   openNavModal,
   closeNavModal,
 } = modals.actions;
