@@ -22,7 +22,7 @@ interface ModalProps {
           alignItems: "center",
         },
         content: {
-          top: '12.5rem',
+          top: '14.5rem',
           left: '47%',
           right: 'auto',
           bottom: 'auto',
@@ -30,6 +30,7 @@ interface ModalProps {
           transform: 'translate(-50%, -50%)',
           padding: '0px',
           borderRadius: '.5rem',
+          width:'16.5rem',
           backgroundColor: (theme === 'light') ? '#fff' : '#2B2C37',
           border: 'none'
         },

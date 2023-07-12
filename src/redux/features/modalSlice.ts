@@ -16,7 +16,6 @@ export const modals = createSlice({
 
     openNavModal: (state) => {
         state.navModal = true
-        console.log(state.navModal)
     },
 
     closeNavModal: (state) => {

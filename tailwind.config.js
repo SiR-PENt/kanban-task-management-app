@@ -13,6 +13,7 @@ module.exports = {
        'dark-grey': '#2b2c37',
        'medium-grey': '#828FA3',
        'very-dark-grey': '#20212C',
+       'light-grey': '#F4F7FD',
 
       },
       backgroundImage: {

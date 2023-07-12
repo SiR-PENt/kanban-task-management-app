@@ -5,7 +5,7 @@ import chevronDown from '../../../public/icon-chevron-down.svg'
 import addTask from '../../../public/icon-add-task-mobile.svg'
 import ellipsis from '../../../public/icon-vertical-ellipsis.svg'
 import Image from 'next/image'
-import NavModal from './Modals/NavModal'
+import NavModal from './Modals/nav-modal/NavModal'
 import { useAppDispatch, } from '@/components/redux/hooks'
 import { openNavModal, } from '@/components/redux/features/modalSlice'
 
