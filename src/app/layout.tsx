@@ -1,7 +1,9 @@
+
 import './globals.css'
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { Providers } from "@/components/redux/provider";
 import { ProvidersTheme } from './providers';
+import { SessionProvider } from 'next-auth/react';
 import Navbar from './root-components/Header';
 
 const pjs = Plus_Jakarta_Sans({ subsets: ['latin'], display: 'swap', })
@@ -21,7 +23,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={pjs.className}>
+    
       <body className='bg-white dark:bg-very-dark-grey'>
+  
         <Providers>
         <ProvidersTheme>
           <Navbar/>
@@ -29,6 +33,7 @@ export default function RootLayout({
         </ProvidersTheme>
         </Providers>
       </body>
+    
     </html>
   )
 }

@@ -27,7 +27,7 @@ export default function NavFooter() {
           <Image src={iconLightTheme} alt='board icon' className="object-contain"/>
            <div 
            onClick={() => (theme === 'light') ? setTheme('dark') : setTheme('light')}
-           className="w-9 h-5 rounded-2xl px-px relative bg-main-purple flex items-center">
+           className="w-9 h-5 rounded-2xl px-px relative bg-main-purple flex items-center cursor-pointer">
            <div className={`w-4 h-4 rounded-full bg-white absolute ${theme === 'light' ? 'left-0' : 'right-0' }`}/>
           </div>
           <Image src={iconDarkTheme} alt='board icon' className="object-contain"/>

@@ -1,6 +1,11 @@
 import type { NextAuthOptions } from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import GoogleProvider from 'next-auth/providers/google'
+import { collection } from "firebase/firestore";
+import { addDoc, getDocs, doc } from "firebase/firestore"; 
+import { db } from '@/components/app/root-components/firebase';
+import data from '../../../root-components/data.json'
+import { User } from 'next-auth';
 
 export const options: NextAuthOptions = {
     providers: [
@@ -8,29 +13,11 @@ export const options: NextAuthOptions = {
             clientId: process.env.GITHUB_ID as string,
             clientSecret: process.env.GITHUB_SECRET as string,
         }),
-        CredentialsProvider({
-            name: 'Credentials',
-            credentials: {
-                username: {
-                   label: ' Username:',
-                   type: 'text',
-                   placeholder:'Enter Your Username'
-                },
-                password: {
-                   label: 'Password:',
-                   type: 'password',
-                   placeholder:'Enter Your Password'
-                }
-            },
-            async authorize(credentials) {
-                const user = { id: '42', name: 'dave', password: 'nextauth'}
-                if(credentials?.username === user.name && credentials?.password === user.password){
-                    return user
-                }
-                else {
-                    return null
-                }
-            }
-        })
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+          })
     ],
+// ...
 }
+// 116323452573569343854
