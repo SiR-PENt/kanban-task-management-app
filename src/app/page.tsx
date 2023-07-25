@@ -1,42 +1,45 @@
 'use client'
 import { collection, getDocs, addDoc } from "firebase/firestore";
 import { db } from "./root-components/firebase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getSession } from 'next-auth/react'
 import data from './root-components/data.json'
+import { updateUserDetails, getUserDetails } from "../redux/features/userSlice";
+import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
 
 export default function Dashboard() {
 
-  const [ sessionUser, setSessionUser ] = useState<{[key:string]: any}>()
+  const dispatch = useAppDispatch(); // step 1
 
-  const querySnapshot = async () =>  {
-    const getDos =  await getDocs(collection(db, "users"));
-    const docid = getDos.docs.map((doc) =>  {
-      return doc.data()
-    })
-    return { getDos, docid }
-   }
+  const getUserSession = async () => {
+   const session =  await getSession();
+   dispatch(updateUserDetails(session?.user))
+  }  // step 2 => getSession of user and save in the redux user state
+  
+  const user = useAppSelector(getUserDetails) // step 3 => get user data from redux store
+ 
+   const handleAddDoc = async () => { 
+    // this is a way to check if a user already exists in the db, by checking if a tasks exists for a user
+       const docRef = collection(db, "users", user.email, 'tasks')
+       const getDos = await getDocs(docRef);
+       if(getDos.docs.length > 0) {
+          return
+       }
+       else {
+        try { 
+          await addDoc(collection(db, "users", user.email, 'tasks'), data);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+       }} 
 
-   const getDocIds = async () => {
-    const session =  await getSession();
-    setSessionUser(session?.user)
-    if(sessionUser) {
-      try {
-        const docRef = await addDoc(collection(db, "users", sessionUser.email, 'tasks'), data);
-        console.log("Document written with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-      const docid = await querySnapshot();
-      console.log(docid);
-    }
-  }
+  useEffect(() => {
+     handleAddDoc() // step 4 => when the user data changes, call this function
+   }, [user])
   
   useEffect(() => {
-    getDocIds()
+    getUserSession() // step 3 => after page renders, call this function
   }, [])
-  // const { docid } =  querySnapshot()
-  // console.log(docid)
 
   return (
     <main>
