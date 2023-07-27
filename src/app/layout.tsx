@@ -1,4 +1,3 @@
-
 import './globals.css'
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { Providers } from "@/components/redux/provider";
