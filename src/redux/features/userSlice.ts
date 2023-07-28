@@ -14,7 +14,6 @@ export const user = createSlice({
     reducers: {
       updateUserDetails: (state, { payload }) => {
           state.userDetails = payload
-          console.log(state.userDetails)
       },
     },
   });

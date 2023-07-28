@@ -6,12 +6,13 @@ import addTask from '../../../public/icon-add-task-mobile.svg'
 import ellipsis from '../../../public/icon-vertical-ellipsis.svg'
 import Image from 'next/image'
 import NavModal from './Modals/nav-modal/NavModal'
-import { useAppDispatch, } from '@/components/redux/hooks'
-import { openNavModal, } from '@/components/redux/features/modalSlice'
+import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
+import { openNavModal, getPageTitle} from '@/components/redux/features/modalSlice'
 
 export default function Navbar() {
 
    const dispatch = useAppDispatch()
+   const pageTitle = useAppSelector(getPageTitle)
    const openModal = () => dispatch(openNavModal()) 
 
     return (
@@ -23,7 +24,7 @@ export default function Navbar() {
             <div 
              onClick={openModal}
             className='flex space-x-2 items-center cursor-pointer'>
-            <p className='text-black dark:text-white text-xl font-bold'>Platform Launch</p>
+            <p className='text-black dark:text-white text-xl font-bold'>{pageTitle}</p>
             <Image src={chevronDown} alt='chevron-down' className='object-contain'/>
             </div>
             </div>

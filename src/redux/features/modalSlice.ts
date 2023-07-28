@@ -7,6 +7,7 @@ type CounterState = {
 
 const initialState: CounterState = {
   navModal: false,
+  pageTitle: ''
 } 
 
 export const modals = createSlice({
@@ -21,14 +22,20 @@ export const modals = createSlice({
     closeNavModal: (state) => {
         state.navModal = false
     },
+
+    setPageTitle: (state, {payload}) => {
+        state.pageTitle = payload
+    },
   },
 });
 
 export const {
   openNavModal,
   closeNavModal,
+  setPageTitle,
 } = modals.actions;
 
 export const getNavModalValue = (state: RootState) => state.modals.navModal;
+export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 
 export default modals.reducer;

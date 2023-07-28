@@ -6,7 +6,6 @@ import { getSession } from 'next-auth/react'
 import data from './root-components/data.json'
 import { updateUserDetails, getUserDetails } from "../redux/features/userSlice";
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
-import { useFetchDataFromDbQuery } from "../redux/features/apiSlice";
 
 export default function Dashboard() {
 
@@ -33,19 +32,14 @@ export default function Dashboard() {
           console.error("Error adding document: ", e);
         }
        }}
-       
-       if(user) {
-         const { data, error } = useFetchDataFromDbQuery(user.email)
-         console.log('data', data, 'error', error)
-       }
 
      useEffect(() => {
          handleAddDoc() // step 4 => when the user data changes, call this function
      }, [user])
   
-  useEffect(() => {
-    getUserSession() // step 3 => after page renders, call this function
-  }, [])
+    useEffect(() => {
+         getUserSession() // step 3 => after page renders, call this function
+     }, [])
 
   return (
     <main>
