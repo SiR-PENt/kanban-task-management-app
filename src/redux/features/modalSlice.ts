@@ -6,8 +6,9 @@ type CounterState = {
 };
 
 const initialState: CounterState = {
-  navModal: false,
-  pageTitle: ''
+  isNavModalOpen: false,
+  pageTitle: '',
+  isAddBoardModalOpen: false,
 } 
 
 export const modals = createSlice({
@@ -16,16 +17,26 @@ export const modals = createSlice({
   reducers: {
 
     openNavModal: (state) => {
-        state.navModal = true
+        state.isNavModalOpen = true
     },
 
     closeNavModal: (state) => {
-        state.navModal = false
+        state.isNavModalOpen = false
     },
 
     setPageTitle: (state, {payload}) => {
         state.pageTitle = payload
     },
+
+    openAddBoardModal: (state) => {
+      state.isNavModalOpen = false
+      state.isAddBoardModalOpen = true
+    },
+
+    closeAddBoardModal: (state) => {
+      state.isAddBoardModalOpen = false
+    },
+
   },
 });
 
@@ -33,9 +44,12 @@ export const {
   openNavModal,
   closeNavModal,
   setPageTitle,
+  openAddBoardModal,
+  closeAddBoardModal,
 } = modals.actions;
 
-export const getNavModalValue = (state: RootState) => state.modals.navModal;
+export const getNavModalValue = (state: RootState) => state.modals.isNavModalOpen;
+export const getAddBoardModalValue = (state: RootState) => state.modals.isAddBoardModalOpen;
 export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 
 export default modals.reducer;

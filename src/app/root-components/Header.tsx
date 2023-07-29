@@ -5,7 +5,8 @@ import chevronDown from '../../../public/icon-chevron-down.svg'
 import addTask from '../../../public/icon-add-task-mobile.svg'
 import ellipsis from '../../../public/icon-vertical-ellipsis.svg'
 import Image from 'next/image'
-import NavModal from './Modals/nav-modal/NavModal'
+import NavModal from './Modals/nav-modal/Modal'
+import AddBoard from './Modals/AddBoard'
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
 import { openNavModal, getPageTitle} from '@/components/redux/features/modalSlice'
 
@@ -39,6 +40,7 @@ export default function Navbar() {
             </button>
             </div>
             <NavModal/>
+            <AddBoard/>
         </nav>
     )
 }

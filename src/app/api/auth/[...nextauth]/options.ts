@@ -3,7 +3,7 @@ import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 import { collection } from "firebase/firestore";
 import { addDoc, getDocs, doc } from "firebase/firestore"; 
-import { db } from '@/components/app/root-components/firebase';
+import { db } from '@/components/app/utils/firebase';
 import data from '../../../root-components/data.json'
 import { User } from 'next-auth';
 

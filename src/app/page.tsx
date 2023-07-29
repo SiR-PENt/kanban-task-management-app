@@ -1,9 +1,9 @@
 'use client'
 import { collection, getDocs, addDoc } from "firebase/firestore";
-import { db } from "./root-components/firebase";
+import { db } from "./utils/firebase";
 import { useEffect } from "react";
 import { getSession } from 'next-auth/react'
-import data from './root-components/data.json'
+import data from './utils/data.json'
 import { updateUserDetails, getUserDetails } from "../redux/features/userSlice";
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
 

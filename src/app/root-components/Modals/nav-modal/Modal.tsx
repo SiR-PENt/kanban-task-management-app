@@ -7,10 +7,11 @@ import iconBoard from '../../../../../public/icon-board.svg'
 import iconBoardPurple from '../../../../../public/icon-board-purple.png'
 import iconBoardWhite from '../../../../../public/icon-board-white.png'
 import Image from "next/image";
-import NavFooter from "./Footer";
-import { useFetchDataFromDbQuery } from "@/components/redux/features/apiSlice";
+import NavModalFooter from "./Footer";
+import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import { getUserDetails } from "@/components/redux/features/userSlice";
 import { useState, useEffect } from "react";
+import { openAddBoardModal } from "@/components/redux/features/modalSlice";
 
 export default function NavModal() {
    
@@ -30,7 +31,7 @@ export default function NavModal() {
       if(data) {
         console.log(data)
         const activeBoard = data[0]?.boards.find((item:any, index:number) => index === active)
-        dispatch(setPageTitle(activeBoard.name))
+        dispatch(setPageTitle(activeBoard?.name))
       }
     }, [data])
 
@@ -38,7 +39,7 @@ export default function NavModal() {
         <Modal isOpen={isNavModalOpen} onRequestClose={closeModal}>  
         {
           data && (
-          <div className='py-3 pr-7'>
+          <div className='w-[16.5rem] py-3 pr-7'>
              <p className="text-medium-grey pl-5 text-[.95rem] font-semibold uppercase pb-3">{`All Boards (${data[0]?.boards.length})`}</p>  
              {
               data[0]?.boards.map((board: {[key:string]: any}, index: number) => {
@@ -55,7 +56,9 @@ export default function NavModal() {
                 )
               })
              }
-             <div className="flex items-center space-x-2 pl-5 py-3">
+             <div 
+             onClick={() => dispatch(openAddBoardModal())}
+             className="flex items-center space-x-2 pl-5 py-3 border">
              <Image src={iconBoardPurple} alt='board icon'/>
              <p className="text-base font-bold capitalize text-main-purple"> + Create New Board</p>  
              </div>
@@ -63,7 +66,7 @@ export default function NavModal() {
          </div>
           )
         }
-        <NavFooter/>        
+        <NavModalFooter/>        
         </Modal>
     )
 }

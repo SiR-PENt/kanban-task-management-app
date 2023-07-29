@@ -30,7 +30,7 @@ interface ModalProps {
           transform: 'translate(-50%, -50%)',
           padding: '0px',
           borderRadius: '.5rem',
-          width:'16.5rem',
+          width:'auto',
           backgroundColor: (theme === 'light') ? '#fff' : '#2B2C37',
           border: 'none'
         },
@@ -45,4 +45,16 @@ interface ModalProps {
           {children}
         </ReactModal>
     );
+  }
+
+  interface ModalBody {
+     children: React.ReactNode
+  }
+
+  export function ModalBody({ children }: ModalBody) {
+    return (
+      <div className='w-[21.4rem] md:w-[30rem] p-8'>
+      {children}
+      </div>
+    )
   }

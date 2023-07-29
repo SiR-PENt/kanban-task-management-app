@@ -6,7 +6,7 @@ import iconDarkTheme from '../../../../../public/icon-dark-theme.svg'
 import { useTheme } from 'next-themes'
 import { useState, useEffect } from 'react'
 
-export default function NavFooter() {
+export default function NavModalFooter() {
 
     const [mounted, setMounted] = useState(false)
     const { theme, setTheme } = useTheme()

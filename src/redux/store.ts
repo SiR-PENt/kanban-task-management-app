@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { rootReducer } from "./features/rootReducer";
-import { fireStoreApi } from "./features/apiSlice";
+import { fireStoreApi } from "./services/apiSlice";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
 
 export const store = configureStore({
