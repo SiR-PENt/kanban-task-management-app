@@ -2,6 +2,7 @@ import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 import { db } from '@/components/app/utils/firebase'
 import { collection, getDocs } from 'firebase/firestore'
 
+// next-redux-wrapper
 
 export const fireStoreApi = createApi({
     reducerPath: 'firestoreApi', // the path for the reducer

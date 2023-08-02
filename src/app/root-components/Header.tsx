@@ -6,15 +6,19 @@ import addTask from '../../../public/icon-add-task-mobile.svg'
 import ellipsis from '../../../public/icon-vertical-ellipsis.svg'
 import Image from 'next/image'
 import NavModal from './Modals/nav-modal/Modal'
-import AddBoard from './Modals/AddBoard'
+import AddBoard from './Modals/AddOrEditBoard'
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
 import { openNavModal, getPageTitle} from '@/components/redux/features/modalSlice'
+import { addBoardColumn } from '../utils/addBoardColumn'
+import { useState } from 'react'
+import Dropdown from './Dropdown'
 
 export default function Navbar() {
 
    const dispatch = useAppDispatch()
    const pageTitle = useAppSelector(getPageTitle)
    const openModal = () => dispatch(openNavModal()) 
+   const [ show, setShow ] = useState<boolean>(false)
 
     return (
 
@@ -35,12 +39,15 @@ export default function Navbar() {
             className='bg-main-purple px-4 py-2 rounded-2xl'>
             <Image src={addTask} alt='icon-add-task'/>
             </button>
-            <button>
+            <div className='relative flex items-center'>
+            <button onClick={() => setShow(!show)}>
             <Image src={ellipsis} alt='icon-vertical-ellipsis'/>
             </button>
+            <Dropdown show={show}/>
+            </div>
             </div>
             <NavModal/>
-            <AddBoard/>
+            <AddBoard columns={addBoardColumn} variant='Add New Board'/>
         </nav>
     )
 }

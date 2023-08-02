@@ -14,6 +14,7 @@ module.exports = {
        'medium-grey': '#828FA3',
        'very-dark-grey': '#20212C',
        'light-grey': '#F4F7FD',
+       'red': '#EA5555',
 
       },
       backgroundImage: {

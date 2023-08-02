@@ -56,12 +56,12 @@ export default function NavModal() {
                 )
               })
              }
-             <div 
+             <button
              onClick={() => dispatch(openAddBoardModal())}
-             className="flex items-center space-x-2 pl-5 py-3 border">
+             className="flex items-center space-x-2 pl-5 py-3">
              <Image src={iconBoardPurple} alt='board icon'/>
              <p className="text-base font-bold capitalize text-main-purple"> + Create New Board</p>  
-             </div>
+             </button>
 
          </div>
           )
