@@ -21,7 +21,7 @@ interface ITasksProps {
           const completedSubtasks = subtasks.filter((subtask) => subtask.isCompleted === true).length;
   
           return (
-            <div key={index} className='dark:bg-dark-grey'>
+            <div key={index} className='dark:bg-dark-grey p-6 rounded-md mt-6'>
               <p>{title}</p>
               <p>{`${completedSubtasks} of ${subtasks.length} subtasks`}</p>
             </div>

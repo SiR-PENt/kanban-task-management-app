@@ -35,14 +35,14 @@ export default function Boards() {
     }, [ data, activeBoard ])
     
     return  (
-        <div className='p-4 border h-full flex overflow-y-auto'>
+        <div className='p-4 border h-full flex space-x-6 overflow-y-auto'>
           {(columns.length > 0) ? (
              columns.map((column, index) => {
                const { name, tasks } = column;
                console.log(tasks)
                return (
-                 <div key={index} className="border w-[90%] shrink-0">
-                     <p className='pb-6'>{`${name} (${tasks.length})`}</p>
+                 <div key={index} className="w-[17.5rem] shrink-0">
+                     <p>{`${name} (${tasks.length})`}</p>
                      <Tasks tasks={tasks}/>
                  </div>
                )
