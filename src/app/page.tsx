@@ -6,6 +6,7 @@ import { getSession } from 'next-auth/react'
 import data from './utils/data.json'
 import { updateUserDetails, getUserDetails } from "../redux/features/userSlice";
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
+import Boards from "./root-components/Boards";
 
 export default function Dashboard() {
 
@@ -43,7 +44,8 @@ export default function Dashboard() {
 
   return (
     <main>
-     <p className="dark:text-red-900"></p>
+     {/* <p className="dark:text-red-900"></p> */}
+     <Boards/>
     </main>
   )
 }

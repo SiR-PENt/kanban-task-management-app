@@ -47,7 +47,7 @@ export default function Navbar() {
             </div>
             </div>
             <NavModal/>
-            <AddBoard columns={addBoardColumn} variant='Add New Board'/>
+            <AddBoard columns={addBoardColumn}/>
         </nav>
     )
 }

@@ -1,6 +1,6 @@
 import { ModalBody, CRUDModal } from "./Modal";
 import { useAppDispatch, useAppSelector } from "@/components/redux/hooks";
-import { getAddBoardModalValue, getNavModalValue, closeAddBoardModal, closeEditBoardModal, getPageTitle } from "@/components/redux/features/modalSlice";
+import { getAddBoardModalValue, closeAddBoardModal, getPageTitle, getAddOrEditBoardModalVariantValue } from "@/components/redux/features/modalSlice";
 import React, {  useState } from "react";
 import iconCross from '../../../../public/icon-cross.svg'
 import Image from "next/image";
@@ -12,21 +12,22 @@ interface IColumn {
 }
 
 interface IAddBoard {
-   variant: 'Add New Board',
    columns: IColumn[],
 }
 
-export default function AddBoard({ variant, columns }: IAddBoard) {
+export default function AddBoard({ columns }: IAddBoard) {
     
-    const isVariantAdd = variant === 'Add New Board'
+    const modalVariant = useAppSelector(getAddOrEditBoardModalVariantValue) 
+    const isVariantAdd = modalVariant === 'Add New Board'
     const [ boardName, setBoardName ] = useState<string>('');
     const [ boardColumns, setBoardColumns ] = useState<IColumn[]>(columns)
     const currentBoardTitle = useAppSelector(getPageTitle);
 
     const dispatch = useAppDispatch()
-    const isModalOpen = useAppSelector(isVariantAdd ? getAddBoardModalValue : getNavModalValue )
 
-    const closeModal = () => dispatch(isVariantAdd ? closeAddBoardModal(): closeEditBoardModal()) 
+    const isModalOpen = useAppSelector(getAddBoardModalValue)
+
+    const closeModal = () => dispatch(closeAddBoardModal()) 
 
     const handleChange = (id: string) => {
         return function (e: React.ChangeEvent<HTMLInputElement>) {
@@ -43,7 +44,7 @@ export default function AddBoard({ variant, columns }: IAddBoard) {
     return (
         <CRUDModal isOpen={isModalOpen} onRequestClose={closeModal}>
             <ModalBody>
-                <p>{variant}</p>
+                <p>{modalVariant}</p>
                 <div className='py-6'>
                     <div>
                         <label htmlFor="boardName">

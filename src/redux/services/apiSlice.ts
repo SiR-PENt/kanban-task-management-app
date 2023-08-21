@@ -8,7 +8,7 @@ export const fireStoreApi = createApi({
     reducerPath: 'firestoreApi', // the path for the reducer
     baseQuery: fakeBaseQuery(), // because we are using fb that has no endpoint
     endpoints: (builder) => ({
-        fetchDataFromDb: builder.query<{[key: string]: any }, string>({ //builder.query for makes requests, builder.mutation for CRUD operations
+        fetchDataFromDb: builder.query<{[key: string]: any }[], string>({ //builder.query for makes requests, builder.mutation for CRUD operations
             async queryFn(email) {    // forgotten why I used queryFn and not just query. Will do my research as to why
                 try {
                     const ref = collection(db, `users/${email}/tasks`)

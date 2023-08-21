@@ -8,13 +8,13 @@ type CounterState = {
 const initialState: CounterState = {
   isNavModalOpen: false,
   pageTitle: '',
-  isAddBoardModalOpen: false,
-  isEditBoardModalOpen: false,
+  isAddBoardModalOpen: { isOpen: false, variant: ''},
 } 
 
 export const modals = createSlice({
   name: "modals",
   initialState,
+
   reducers: {
 
     openNavModal: (state) => {
@@ -29,21 +29,14 @@ export const modals = createSlice({
         state.pageTitle = payload
     },
 
-    openAddBoardModal: (state) => {
+    openAddBoardModal: (state, { payload }) => {
       state.isNavModalOpen = false
-      state.isAddBoardModalOpen = true
+      state.isAddBoardModalOpen.isOpen = true
+      state.isAddBoardModalOpen.variant = payload
     },
 
     closeAddBoardModal: (state) => {
-      state.isAddBoardModalOpen = false
-    },
-
-    openEditBoardModal: (state) => {
-      state.isEditBoardModalOpen = true
-    },
-
-    closeEditBoardModal: (state) => {
-      state.isEditBoardModalOpen = false
+      state.isAddBoardModalOpen.isOpen = false
     },
 
   },
@@ -55,12 +48,11 @@ export const {
   setPageTitle,
   openAddBoardModal,
   closeAddBoardModal,
-  closeEditBoardModal
 } = modals.actions;
 
 export const getNavModalValue = (state: RootState) => state.modals.isNavModalOpen;
-export const getAddBoardModalValue = (state: RootState) => state.modals.isAddBoardModalOpen;
-export const getEditBoardModalValue = (state: RootState) => state.modals.isEditBoardModalOpen;
+export const getAddBoardModalValue = (state: RootState) => state.modals.isAddBoardModalOpen.isOpen;
+export const getAddOrEditBoardModalVariantValue = (state: RootState) => state.modals.isAddBoardModalOpen.variant;
 export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 
 export default modals.reducer;

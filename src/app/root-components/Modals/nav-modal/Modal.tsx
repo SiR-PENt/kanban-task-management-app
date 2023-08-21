@@ -29,7 +29,6 @@ export default function NavModal() {
 
     useEffect(() => {
       if(data) {
-        console.log(data)
         const activeBoard = data[0]?.boards.find((item:any, index:number) => index === active)
         dispatch(setPageTitle(activeBoard?.name))
       }
@@ -49,7 +48,7 @@ export default function NavModal() {
                 <div 
                 onClick={() => handleNav(index, name)}
                 key={index}
-                className={`${isActive ? 'bg-main-purple rounded-tr-full rounded-br-full': ''} flex items-center space-x-2 pl-5 py-3 pb-3`}>
+                className={`${isActive ? 'bg-main-purple rounded-tr-full rounded-br-full': ''} cursor-pointer flex items-center space-x-2 pl-5 py-3 pb-3`}>
                 {isActive ? <Image src={iconBoardWhite} alt='active board icon'/> : <Image src={iconBoard} alt='board icon'/> }
                 <p className={`${isActive ? 'text-white' : 'text-medium-grey'} text-lg capitalize`}>{name}</p>  
                </div>
@@ -57,7 +56,7 @@ export default function NavModal() {
               })
              }
              <button
-             onClick={() => dispatch(openAddBoardModal())}
+             onClick={() => dispatch(openAddBoardModal('Add New Board'))}
              className="flex items-center space-x-2 pl-5 py-3">
              <Image src={iconBoardPurple} alt='board icon'/>
              <p className="text-base font-bold capitalize text-main-purple"> + Create New Board</p>  
