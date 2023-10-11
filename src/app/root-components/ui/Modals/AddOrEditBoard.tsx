@@ -2,9 +2,9 @@ import { ModalBody, CRUDModal } from "./Modal";
 import { useAppDispatch, useAppSelector } from "@/components/redux/hooks";
 import { getAddBoardModalValue, closeAddBoardModal, getPageTitle, getAddOrEditBoardModalVariantValue } from "@/components/redux/features/modalSlice";
 import React, {  useState } from "react";
-import iconCross from '../../../../public/icon-cross.svg'
+import iconCross from '../../../../../public/icon-cross.svg'
 import Image from "next/image";
-import Button from "./Button";
+import Button from "../Button";
 
 interface IColumn {
     name: string,
@@ -84,11 +84,11 @@ export default function AddBoard({ columns }: IAddBoard) {
                             })
                         }
                         <div className='pt-3'>
-                        <Button text='+ Add New Board'/>
+                        <Button intent='primary' text='+ Add New Board'/>
                         </div>
                     </div>
                     <div className="pt-6">
-                     <Button text='Create New Board'/>
+                     <Button intent='secondary' text='Create New Board'/>
                     </div>
                 </div>
             </ModalBody>         

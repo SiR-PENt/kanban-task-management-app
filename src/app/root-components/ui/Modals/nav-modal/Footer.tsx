@@ -1,8 +1,8 @@
 'use client'
 
 import Image from "next/image"
-import iconLightTheme from '../../../../../public/icon-light-theme.svg'
-import iconDarkTheme from '../../../../../public/icon-dark-theme.svg'
+import iconLightTheme from '../../../../../../public/icon-light-theme.svg'
+import iconDarkTheme from '../../../../../../public/icon-dark-theme.svg'
 import { useTheme } from 'next-themes'
 import { useState, useEffect } from 'react'
 

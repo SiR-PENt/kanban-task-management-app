@@ -14,8 +14,6 @@ interface ITasksProps {
   export default function Tasks({ tasks }: ITasksProps) {
 
     return (
-    //   <div className="border">
-        // {
         tasks.map((task, index) => {
           const { title, subtasks } = task;
           const completedSubtasks = subtasks.filter((subtask) => subtask.isCompleted === true).length;
@@ -23,12 +21,10 @@ interface ITasksProps {
           return (
             <div key={index} className='dark:bg-dark-grey p-6 rounded-md mt-6'>
               <p>{title}</p>
-              <p>{`${completedSubtasks} of ${subtasks.length} subtasks`}</p>
+              <p className="text-medium-grey text-xs">{`${completedSubtasks} of ${subtasks.length} subtasks`}</p>
             </div>
           );
         })
-        // }
-    //   </div>
     );
   }
   

@@ -3,9 +3,9 @@
 import Modal from "../Modal";
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
 import { getNavModalValue, closeNavModal, setPageTitle } from '@/components/redux/features/modalSlice'
-import iconBoard from '../../../../../public/icon-board.svg'
-import iconBoardPurple from '../../../../../public/icon-board-purple.png'
-import iconBoardWhite from '../../../../../public/icon-board-white.png'
+import iconBoard from '../../../../../../public/icon-board.svg'
+import iconBoardPurple from '../../../../../../public/icon-board-purple.png'
+import iconBoardWhite from '../../../../../../public/icon-board-white.png'
 import Image from "next/image";
 import NavModalFooter from "./Footer";
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
