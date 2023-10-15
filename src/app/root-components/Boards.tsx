@@ -2,7 +2,6 @@
 
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice"
 import { useAppSelector } from "@/components/redux/hooks"
-import { getUserDetails } from "@/components/redux/features/userSlice"
 import { getPageTitle } from "@/components/redux/features/modalSlice"
 import { useEffect, useState } from "react"
 import Tasks from "./Tasks"
@@ -15,22 +14,21 @@ interface Column {
 export default function Boards() {
     
     const [ columns, setColumns ] = useState<Column[]>([])
-    const user = useAppSelector(getUserDetails)
     const activeBoard = useAppSelector(getPageTitle)
-    const { data } = useFetchDataFromDbQuery(user.email)
+    const { data } = useFetchDataFromDbQuery()
+
 
     useEffect(() => {
       if(data !== undefined) {
         const [ boards ] = data
+        console.log(boards)
         if(boards) {
-          console.log('boards', boards.boards)
           const activeBoardData = boards.boards.find((board: {name: string}) => board.name === activeBoard)
           if(activeBoardData) {
             const { columns } = activeBoardData
             setColumns(columns)
           }
         }
-        console.log(columns)
       }
     }, [ data, activeBoard ])
     
@@ -39,7 +37,6 @@ export default function Boards() {
           {(columns.length > 0) ? (
              columns.map((column, index) => {
                const { name, tasks } = column;
-               console.log(tasks)
                return (
                  <div key={index} className="w-[17.5rem] shrink-0">
                      <p>{`${name} (${tasks.length})`}</p>

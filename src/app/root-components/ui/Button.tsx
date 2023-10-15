@@ -1,7 +1,7 @@
 import { cva, VariantProps } from 'class-variance-authority'
 
 const buttonStyles = cva(
-  'rounded-3xl py-2 w-full font-sm',
+  'rounded-3xl py-2 w-full text-sm font-bold',
    {
     variants: {
     intent: {
@@ -18,7 +18,8 @@ const buttonStyles = cva(
 
 interface ButtonProps extends VariantProps<typeof buttonStyles>{
    text: string,
-}
+   onClick?: () => void
+  }
 
 export default function Button({intent, text, ...props}: ButtonProps) {
 

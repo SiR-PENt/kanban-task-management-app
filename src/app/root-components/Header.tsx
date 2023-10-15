@@ -6,10 +6,9 @@ import addTask from '../../../public/icon-add-task-mobile.svg'
 import ellipsis from '../../../public/icon-vertical-ellipsis.svg'
 import Image from 'next/image'
 import NavModal from './ui/Modals/nav-modal/Modal'
-import AddBoard from './ui/Modals/AddOrEditBoard'
+import AddOrEditBoardModal from './ui/Modals/AddOrEditBoardModal'
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
 import { openNavModal, getPageTitle} from '@/components/redux/features/modalSlice'
-import { addBoardColumn } from '../utils/addBoardColumn'
 import { useState } from 'react'
 import Dropdown from './Dropdown'
 
@@ -47,7 +46,7 @@ export default function Navbar() {
             </div>
             </div>
             <NavModal/>
-            <AddBoard columns={addBoardColumn}/>
+            <AddOrEditBoardModal/>
         </nav>
     )
 }
