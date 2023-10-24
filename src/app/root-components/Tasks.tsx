@@ -14,9 +14,9 @@ interface ITasksProps {
   export default function Tasks({ tasks }: ITasksProps) {
 
     return (
-        tasks.map((task, index) => {
+        tasks?.map((task, index) => {
           const { title, subtasks } = task;
-          const completedSubtasks = subtasks.filter((subtask) => subtask.isCompleted === true).length;
+          const completedSubtasks = subtasks?.filter((subtask) => subtask?.isCompleted === true).length;
   
           return (
             <div key={index} className='dark:bg-dark-grey p-6 rounded-md mt-6'>

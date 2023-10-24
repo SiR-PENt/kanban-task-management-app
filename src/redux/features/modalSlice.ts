@@ -8,7 +8,8 @@ type CounterState = {
 const initialState: CounterState = {
   isNavModalOpen: false,
   pageTitle: '',
-  isAddBoardModalOpen: { isOpen: false, variant: ''},
+  isAddOrEditBoardModalOpen: { isOpen: false, variant: ''},
+  isAddOrEditTaskModalOpen: { isOpen: false, variant: ''},
 } 
 
 export const modals = createSlice({
@@ -29,16 +30,26 @@ export const modals = createSlice({
         state.pageTitle = payload
     },
 
-    openAddBoardModal: (state, { payload }) => {
+    openAddOrEditBoardModal: (state, { payload }) => {
       state.isNavModalOpen = false
-      state.isAddBoardModalOpen.isOpen = true
-      state.isAddBoardModalOpen.variant = payload
+      state.isAddOrEditBoardModalOpen.isOpen = true
+      state.isAddOrEditBoardModalOpen.variant = payload
     },
 
-    closeAddBoardModal: (state) => {
-      state.isAddBoardModalOpen.isOpen = false
+    closeAddOrEditBoardModal: (state) => {
+      state.isAddOrEditBoardModalOpen.isOpen = false
+      state.isAddOrEditBoardModalOpen.variant = ''
+    },
+    
+    openAddOrEditTaskModal: (state, { payload }) => {
+      state.isAddOrEditTaskModalOpen.isOpen = true
+      state.isAddOrEditTaskModalOpen.variant = payload
     },
 
+    closeAddOrEditTaskModal: (state) => {
+      state.isAddOrEditTaskModalOpen.isOpen = false
+      state.isAddOrEditTaskModalOpen.variant = ''
+    } 
   },
 });
 
@@ -46,13 +57,17 @@ export const {
   openNavModal,
   closeNavModal,
   setPageTitle,
-  openAddBoardModal,
-  closeAddBoardModal,
+  openAddOrEditBoardModal,
+  closeAddOrEditBoardModal,
+  openAddOrEditTaskModal,
+  closeAddOrEditTaskModal,
 } = modals.actions;
 
 export const getNavModalValue = (state: RootState) => state.modals.isNavModalOpen;
-export const getAddBoardModalValue = (state: RootState) => state.modals.isAddBoardModalOpen.isOpen;
-export const getAddOrEditBoardModalVariantValue = (state: RootState) => state.modals.isAddBoardModalOpen.variant;
+export const getAddOrEditBoardModalValue = (state: RootState) => state.modals.isAddOrEditBoardModalOpen.isOpen;
+export const getAddOrEditBoardModalVariantValue = (state: RootState) => state.modals.isAddOrEditBoardModalOpen.variant;
+export const getAddOrEditTaskModalValue = (state: RootState) => state.modals.isAddOrEditTaskModalOpen.isOpen;
+export const getAddOrEditTaskModalVariantValue = (state: RootState) => state.modals.isAddOrEditTaskModalOpen.variant;
 export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 
 export default modals.reducer;

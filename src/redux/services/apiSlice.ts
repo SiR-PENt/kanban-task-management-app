@@ -23,23 +23,12 @@ export const fireStoreApi = createApi({
             }
         }),
         // mutations
-       addNewBoardToDb: builder.mutation<{ data: null } | { error: unknown }, {[key: string]: any}>({
+       updateBoardToDb: builder.mutation<{ data: null } | { error: unknown }, {[key: string]: any}>({
           async queryFn(data) {
-            // let { boardData, data } = params
             try {
-                // const emptyStringChecker = boardData.columns.some(column => column.name === '') //check if any of the column names is empty
-                // if(params.boardData.name !== '' && !emptyStringChecker ){ //verify that the board name and none of the column names are empty
-                //     if(data){
-                //         let [ boards ] = data;
-                //         const addBoard = [...boards.boards, params.boardData]
-                //         boards =  { boards: addBoard }
-                //         data = [ boards ]
-                        updateDbBoard(data)
-                        
-                        return { data: null }
+                updateDbBoard(data)
+                    return { data: null }
                     }
-                // } 
-            // }
             catch(e) {
                 return { error: e }
             }}
@@ -48,4 +37,4 @@ export const fireStoreApi = createApi({
     })
 })
 
-export const { useFetchDataFromDbQuery, useAddNewBoardToDbMutation } = fireStoreApi
+export const { useFetchDataFromDbQuery, useUpdateBoardToDbMutation } = fireStoreApi

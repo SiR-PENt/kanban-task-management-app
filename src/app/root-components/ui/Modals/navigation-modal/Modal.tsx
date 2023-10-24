@@ -11,7 +11,7 @@ import NavModalFooter from "./Footer";
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import { getUserDetails } from "@/components/redux/features/userSlice";
 import { useState, useEffect } from "react";
-import { openAddBoardModal } from "@/components/redux/features/modalSlice";
+import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
 
 export default function NavModal() {
    
@@ -56,7 +56,7 @@ export default function NavModal() {
               })
              }
              <button
-             onClick={() => dispatch(openAddBoardModal('Add New Board'))}
+             onClick={() => dispatch(openAddOrEditBoardModal('Add New Board'))}
              className="flex items-center space-x-2 pl-5 py-3">
              <Image src={iconBoardPurple} alt='board icon'/>
              <p className="text-base font-bold capitalize text-main-purple"> + Create New Board</p>  

@@ -8,7 +8,7 @@ import Tasks from "./Tasks"
 
 interface Column {
   name: string;
-  tasks: any[]; // Update this type to match your actual data structure
+  tasks?: any[]; // Update this type to match your actual data structure
 }
 
 export default function Boards() {
@@ -21,7 +21,6 @@ export default function Boards() {
     useEffect(() => {
       if(data !== undefined) {
         const [ boards ] = data
-        console.log(boards)
         if(boards) {
           const activeBoardData = boards.boards.find((board: {name: string}) => board.name === activeBoard)
           if(activeBoardData) {
@@ -39,8 +38,8 @@ export default function Boards() {
                const { name, tasks } = column;
                return (
                  <div key={index} className="w-[17.5rem] shrink-0">
-                     <p>{`${name} (${tasks.length})`}</p>
-                     <Tasks tasks={tasks}/>
+                     <p>{`${name} (${tasks ? tasks?.length : 0})`}</p>
+                     <Tasks tasks={tasks!}/>
                  </div>
                )
              })) : <p>loading data</p>  

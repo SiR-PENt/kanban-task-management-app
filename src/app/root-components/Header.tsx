@@ -5,12 +5,13 @@ import chevronDown from '../../../public/icon-chevron-down.svg'
 import addTask from '../../../public/icon-add-task-mobile.svg'
 import ellipsis from '../../../public/icon-vertical-ellipsis.svg'
 import Image from 'next/image'
-import NavModal from './ui/Modals/nav-modal/Modal'
+import NavModal from './ui/Modals/navigation-modal/Modal'
 import AddOrEditBoardModal from './ui/Modals/AddOrEditBoardModal'
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
-import { openNavModal, getPageTitle} from '@/components/redux/features/modalSlice'
+import { openNavModal, getPageTitle, openAddOrEditTaskModal } from '@/components/redux/features/modalSlice'
 import { useState } from 'react'
 import Dropdown from './Dropdown'
+import AddOrEditTaskModal from './ui/Modals/AddOrEditTaskModal'
 
 export default function Navbar() {
 
@@ -35,6 +36,7 @@ export default function Navbar() {
 
             <div className='flex items-center space-x-3'>
             <button 
+            onClick={() => dispatch(openAddOrEditTaskModal('Add New Task'))}
             className='bg-main-purple px-4 py-2 rounded-2xl'>
             <Image src={addTask} alt='icon-add-task'/>
             </button>
@@ -47,6 +49,7 @@ export default function Navbar() {
             </div>
             <NavModal/>
             <AddOrEditBoardModal/>
+            <AddOrEditTaskModal/>
         </nav>
     )
 }
