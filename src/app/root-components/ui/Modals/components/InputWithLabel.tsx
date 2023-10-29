@@ -15,7 +15,7 @@ export default function InputWithLabel({ label, onChange, value, placeholder}: I
         <div className="pt-2">
         <input
          id='boardName'
-         className="borderborder-medium-grey w-full p-2 rounded text-sm hover:border-main-purple cursor-pointer focus:outline-none focus:border-main-purple"
+         className="border border-medium-grey w-full p-2 rounded text-sm hover:border-main-purple cursor-pointer focus:outline-none focus:border-main-purple"
          placeholder={placeholder}
          onChange={onChange}
          value={value}/>               

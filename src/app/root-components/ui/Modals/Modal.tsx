@@ -22,7 +22,7 @@ interface ModalProps {
           alignItems: "center",
         },
         content: {
-          top: '14.5rem',
+          top: '15.5rem',
           left: '47%',
           right: 'auto',
           bottom: 'auto',

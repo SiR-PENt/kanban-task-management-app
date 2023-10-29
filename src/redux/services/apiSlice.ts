@@ -20,7 +20,8 @@ export const fireStoreApi = createApi({
                 catch(e) {
                     return { error: e }
                 }   
-            }
+            },
+        providesTags: ['Tasks'],
         }),
         // mutations
        updateBoardToDb: builder.mutation<{ data: null } | { error: unknown }, {[key: string]: any}>({
@@ -31,9 +32,9 @@ export const fireStoreApi = createApi({
                     }
             catch(e) {
                 return { error: e }
-            }}
-       }),
-
+            }},
+        invalidatesTags: ['Tasks'],
+       }),  
     })
 })
 
