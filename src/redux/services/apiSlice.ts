@@ -2,10 +2,7 @@ import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 import { getBoardFromDb, updateDbBoard } from '@/components/app/utils/functions'
 // next-redux-wrapper
 
-interface IaddBoardParams {
-  boardData: { name: string, columns: {[key: string]: any}[]},
-  data: {[key:string]: any}[],
-}
+
 
 export const fireStoreApi = createApi({
     reducerPath: 'firestoreApi', // the path for the reducer

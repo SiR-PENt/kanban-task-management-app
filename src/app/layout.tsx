@@ -2,7 +2,7 @@ import './globals.css'
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { Providers } from "@/components/redux/provider";
 import { ProvidersTheme } from './providers';
-import Navbar from './root-components/Header';
+import Navbar, { TabletNavbar } from './root-components/Header';
 
 const pjs = Plus_Jakarta_Sans({ subsets: ['latin'], display: 'swap', })
 
@@ -22,11 +22,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={pjs.className}>
     
-      <body className='bg-white dark:bg-very-dark-grey'>
-  
+      <body className='pb-24 bg-white dark:bg-very-dark-grey h-screen overflow-hidden'>
         <Providers>
         <ProvidersTheme>
           <Navbar/>
+          <TabletNavbar/>
           {children}
         </ProvidersTheme>
         </Providers>

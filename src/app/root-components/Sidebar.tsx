@@ -1,0 +1,95 @@
+import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
+import Image from "next/image";
+import { useAppDispatch } from "@/components/redux/hooks";
+import { setPageTitle } from "@/components/redux/features/modalSlice";
+import { useState, useEffect } from "react";
+import iconBoard from '../../.././public/icon-board.svg'
+import iconBoardPurple from '../../.././public/icon-board-purple.png'
+import iconBoardWhite from '../../.././public/icon-board-white.png'
+import iconLightTheme from '../../.././public/icon-light-theme.svg'
+import iconDarkTheme from '../../.././public/icon-dark-theme.svg'
+import iconHideSidebar from '../../.././public/icon-hide-sidebar.svg'
+import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
+import { useTheme } from "next-themes";
+
+export default function Sidebar() {
+    
+  const { data } = useFetchDataFromDbQuery()
+
+  const [ active, setActive ] = useState<number>(0)
+  const [mounted, setMounted] = useState<boolean>(false)
+  const [ showSidebar, setShowSidebar ] = useState<boolean>(true)
+
+  const dispatch = useAppDispatch()
+
+  const handleNav = (index: number, name: string) => {
+     setActive(index)
+     dispatch(setPageTitle(name))
+  }
+
+  
+  const { theme, setTheme } = useTheme()
+
+  // useEffect only runs on the client, so now we can safely show the UI
+   useEffect(() => {
+    setMounted(true)
+   }, [])
+
+   if (!mounted) {
+    return null
+   }
+
+
+    return (
+        <aside className={`${!showSidebar ? '-translate-x-full': 'translate-x-0' } border relative flex-none dark:bg-dark-grey hidden md:block h-full w-[18.75rem] py-6 pr-6`}>
+            {
+                data && (
+                    <>
+                    <p className="text-medium-grey pl-[2.12rem] text-[.95rem] font-semibold uppercase pb-3">
+                      {`All Boards (${data[0]?.boards.length})`}
+                    </p>
+                    {
+                      data[0]?.boards.map((board: {[key:string]: any}, index: number) => {
+                        const { name } = board
+                        const isActive = index === active
+                        return (        
+                        <div 
+                        onClick={() => handleNav(index, name)}
+                        key={index}
+                        className={`${isActive ? 'bg-main-purple rounded-tr-full rounded-br-full': ''} cursor-pointer flex items-center space-x-2 pl-[2.12rem] py-3 pb-3`}>
+                        {isActive ? <Image src={iconBoardWhite} alt='active board icon'/> : <Image src={iconBoard} alt='board icon'/> }
+                        <p className={`${isActive ? 'text-white' : 'text-medium-grey'} text-lg capitalize`}>{name}</p>  
+                       </div>
+                        )})}
+                    </>
+                    )}
+             <button
+             onClick={() => dispatch(openAddOrEditBoardModal('Add New Board'))}
+             className="flex items-center space-x-2 pl-[2.12rem] py-3">
+             <Image src={iconBoardPurple} alt='board icon'/>
+             <p className="text-base font-bold capitalize text-main-purple"> + Create New Board</p>  
+             </button>
+
+            <footer className='absolute bottom-0 p-6 w-full'>
+
+             <div className="h-[3rem] rounded-md flex justify-center items-center space-x-6 bg-light-grey dark:bg-very-dark-grey w-full">
+             <Image src={iconLightTheme} alt='board icon' className="object-contain"/>
+             <div 
+             onClick={() => (theme === 'light') ? setTheme('dark') : setTheme('light')}
+             className="w-9 h-5 rounded-2xl px-px relative bg-main-purple flex items-center cursor-pointer">
+             <div className={`w-4 h-4 rounded-full bg-white absolute ${theme === 'light' ? 'left-0' : 'right-0' }`}/>
+             </div>
+             <Image src={iconDarkTheme} alt='board icon' className="object-contain"/>
+             </div>
+
+             <div 
+             onClick={() => setShowSidebar(false)}
+             className='cursor-pointer flex mt-5'>
+             <Image src={iconHideSidebar} alt='hide sidebar' className="object-contain"/>
+             <p className='text-medium-grey ml-2 text-xs'>Hide Sidebar</p>
+             </div>
+            </footer>
+
+        </aside>
+    )
+}

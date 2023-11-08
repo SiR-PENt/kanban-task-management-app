@@ -2,3 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* body::-webkit-scrollbar {
+    display: none;
+  }
+  
+body {
+    -ms-overflow-style: none;  
+    scrollbar-width: none; 
+    /* overflow: hidden; 
+  } */
+
+/* .boards {
+    height: 100%;
+    /* overflow-y: scroll; 
+}
+
+ .boards::-webkit-scrollbar {
+     width: 5px;
+    }
+    
+.boards::-webkit-scrollbar-thumb {
+    background: rgb(164,167,192);   
+} */ 

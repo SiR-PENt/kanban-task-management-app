@@ -19,8 +19,7 @@ export default function NavModal() {
     const dispatch = useAppDispatch()
     const isNavModalOpen = useAppSelector(getNavModalValue)
     const closeModal = () => dispatch(closeNavModal()) 
-    const user = useAppSelector(getUserDetails)
-    const { data } = useFetchDataFromDbQuery(user.email)
+    const { data } = useFetchDataFromDbQuery()
 
     const handleNav = (index: number, name: string) => {
        setActive(index)
@@ -39,7 +38,9 @@ export default function NavModal() {
         {
           data && (
           <div className='w-[16.5rem] py-3 pr-7'>
-             <p className="text-medium-grey pl-5 text-[.95rem] font-semibold uppercase pb-3">{`All Boards (${data[0]?.boards.length})`}</p>  
+             <p className="text-medium-grey pl-5 text-[.95rem] font-semibold uppercase pb-3">
+              {`All Boards (${data[0]?.boards.length})`}
+              </p>  
              {
               data[0]?.boards.map((board: {[key:string]: any}, index: number) => {
                 const { name } = board
@@ -61,7 +62,6 @@ export default function NavModal() {
              <Image src={iconBoardPurple} alt='board icon'/>
              <p className="text-base font-bold capitalize text-main-purple"> + Create New Board</p>  
              </button>
-
          </div>
           )
         }

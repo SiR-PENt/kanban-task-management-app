@@ -5,6 +5,7 @@ import { useAppSelector } from "@/components/redux/hooks"
 import { getPageTitle } from "@/components/redux/features/modalSlice"
 import { useEffect, useState } from "react"
 import Tasks from "./Tasks"
+import Sidebar from "./Sidebar"
 
 interface Column {
   name: string;
@@ -32,7 +33,9 @@ export default function Boards() {
     }, [ data, activeBoard ])
     
     return  (
-        <div className='p-4 border h-full flex space-x-6 overflow-y-auto'>
+        <div className="md:flex h-full">
+          <Sidebar/>
+         <div className='p-6 w-full overflow-x-auto overflow-y-auto flex space-x-6'>
           {(columns.length > 0) ? (
              columns.map((column, index) => {
                const { name, tasks } = column;
@@ -44,6 +47,7 @@ export default function Boards() {
                )
              })) : <p>loading data</p>  
           }             
+        </div>
         </div>
     )
 }

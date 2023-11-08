@@ -43,8 +43,7 @@ export default function Dashboard() {
      }, [])
 
   return (
-    <main>
-     {/* <p className="dark:text-red-900"></p> */}
+    <main className='h-full border border-red'>
      <Boards/>
     </main>
   )

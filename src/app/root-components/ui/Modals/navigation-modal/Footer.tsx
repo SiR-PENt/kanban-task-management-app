@@ -20,7 +20,6 @@ export default function NavModalFooter() {
       return null
     }
 
-
     return (
         <footer className="px-5 pb-3 w-full">
         <div className="h-[3rem] rounded-md flex justify-center items-center space-x-6 bg-light-grey dark:bg-very-dark-grey w-full">
