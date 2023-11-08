@@ -9,6 +9,7 @@ import iconBoardWhite from '../../.././public/icon-board-white.png'
 import iconLightTheme from '../../.././public/icon-light-theme.svg'
 import iconDarkTheme from '../../.././public/icon-dark-theme.svg'
 import iconHideSidebar from '../../.././public/icon-hide-sidebar.svg'
+import iconShowSidebar from '../../.././public/icon-show-sidebar.svg'
 import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
 import { useTheme } from "next-themes";
 
@@ -41,7 +42,10 @@ export default function Sidebar() {
 
 
     return (
-        <aside className={`${!showSidebar ? '-translate-x-full': 'translate-x-0' } border relative flex-none dark:bg-dark-grey hidden md:block h-full w-[18.75rem] py-6 pr-6`}>
+       <div className='relative hidden md:block'>
+        <aside className={`${!showSidebar ? 'w-0 overflow-hidden':
+         'w-[18.75rem] flex-none dark:bg-dark-grey h-full py-6 pr-6'}
+          transition-width duration-150 ease-out relative`}>
             {
                 data && (
                     <>
@@ -70,7 +74,8 @@ export default function Sidebar() {
              <p className="text-base font-bold capitalize text-main-purple"> + Create New Board</p>  
              </button>
 
-            <footer className='absolute bottom-0 p-6 w-full'>
+            <footer
+             className={`${!showSidebar ? 'hidden' : 'block' } absolute bottom-0 p-6 w-full`}>
 
              <div className="h-[3rem] rounded-md flex justify-center items-center space-x-6 bg-light-grey dark:bg-very-dark-grey w-full">
              <Image src={iconLightTheme} alt='board icon' className="object-contain"/>
@@ -83,13 +88,19 @@ export default function Sidebar() {
              </div>
 
              <div 
-             onClick={() => setShowSidebar(false)}
+             onClick={() => setShowSidebar(!showSidebar)}
              className='cursor-pointer flex mt-5'>
              <Image src={iconHideSidebar} alt='hide sidebar' className="object-contain"/>
              <p className='text-medium-grey ml-2 text-xs'>Hide Sidebar</p>
              </div>
             </footer>
-
         </aside>
+            <div 
+            onClick={() => setShowSidebar(!showSidebar)}
+            className={`${!showSidebar ? 'block' : 'hidden'} cursor-pointer h-12 w-14 bg-main-purple absolute left-full rounded-tr-full rounded-br-full 
+            bottom-4 flex items-center justify-center`}>
+               <Image src={iconShowSidebar} alt='show sidebar' className="object-contain"/>
+            </div>
+            </div>
     )
 }

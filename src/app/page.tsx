@@ -43,7 +43,7 @@ export default function Dashboard() {
      }, [])
 
   return (
-    <main className='h-full border border-red'>
+    <main className='h-full'>
      <Boards/>
     </main>
   )
