@@ -3,10 +3,11 @@ import { getBoardFromDb, updateDbBoard } from '@/components/app/utils/functions'
 // next-redux-wrapper
 
 
-
 export const fireStoreApi = createApi({
+
     reducerPath: 'firestoreApi', // the path for the reducer
     baseQuery: fakeBaseQuery(), // because we are using fb that has no endpoint
+    tagTypes: ['Tasks'],
     endpoints: (builder) => ({
         fetchDataFromDb: builder.query<{[key: string]: any }[], void>({ //builder.query for making requests, builder.mutation for CRUD operations
             async queryFn() {    // forgotten why I used queryFn and not just query. Will do my research as to why:okay, this is because we are not querying
@@ -18,7 +19,7 @@ export const fireStoreApi = createApi({
                     return { error: e }
                 }   
             },
-        providesTags: ['Tasks'],
+            providesTags: ['Tasks'],
         }),
         // mutations
        updateBoardToDb: builder.mutation<{ data: null } | { error: unknown }, {[key: string]: any}>({

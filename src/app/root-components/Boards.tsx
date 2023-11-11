@@ -4,8 +4,11 @@ import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice"
 import { useAppSelector } from "@/components/redux/hooks"
 import { getPageTitle } from "@/components/redux/features/modalSlice"
 import { useEffect, useState } from "react"
+import Image from 'next/image'
 import Tasks from "./Tasks"
 import Sidebar from "./Sidebar"
+import addTask from '../../../public/icon-add-task-mobile.svg'
+import TaskDetailsModal from "./ui/Modals/TaskDetails"
 
 interface Column {
   name: string;
@@ -23,6 +26,7 @@ export default function Boards() {
       if(data !== undefined) {
         const [ boards ] = data
         if(boards) {
+          console.log(boards)
           const activeBoardData = boards.boards.find((board: {name: string}) => board.name === activeBoard)
           if(activeBoardData) {
             const { columns } = activeBoardData
@@ -45,9 +49,22 @@ export default function Boards() {
                      <Tasks tasks={tasks!}/>
                  </div>
                )
-             })) : <p>loading data</p>  
+             })) : (
+              <div className='w-full h-full flex justify-center items-center'>
+                <div className='flex flex-col items-center'>
+                <p className='dark:text-medium-grey text-sm'>This board is empty. Create a new column to get started.</p>
+                <button 
+                // onClick={() => dispatch(openAddOrEditTaskModal('Add New Task'))}
+                className='bg-main-purple text-white px-4 py-2 flex mt-6 rounded-3xl items-center space-x-2'>
+                <Image src={addTask} alt='icon-add-task'/>
+                <p>Add New Column</p>
+                </button>
+                </div>
+              </div>
+             )
           }             
         </div>
+         <TaskDetailsModal/>
         </div>
     )
 }
