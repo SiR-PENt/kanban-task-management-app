@@ -2,8 +2,6 @@ import { db } from '@/components/app/utils/firebase'
 import { collection, getDocs, updateDoc, doc } from 'firebase/firestore'
 import { getSession } from 'next-auth/react'
 
-
-
 export const getBoardFromDb = async () => {
         const session = await getSession();
         if(session?.user) {

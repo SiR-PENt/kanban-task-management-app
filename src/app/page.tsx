@@ -7,6 +7,7 @@ import data from './utils/data.json'
 import { updateUserDetails, getUserDetails } from "../redux/features/userSlice";
 import { useAppDispatch, useAppSelector } from '@/components/redux/hooks'
 import Boards from "./root-components/Boards";
+import Sidebar from "./root-components/Sidebar";
 
 export default function Dashboard() {
 
@@ -44,7 +45,10 @@ export default function Dashboard() {
 
   return (
     <main className='h-full'>
-     <Boards/>
+      <div className="md:flex h-full">
+       <Sidebar/>
+       <Boards/>
+      </div>
     </main>
   )
 }
