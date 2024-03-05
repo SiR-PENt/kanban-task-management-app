@@ -27,6 +27,7 @@ let initialTask: ITaskData = {
       isCompleted: false,
     }]
 } 
+
 const hey = [
   {label: 'hey', value: 'hey'},
   {label: 'fuck', value: 'fuck'}
@@ -106,7 +107,7 @@ export default function AddOrEditTaskModal() {
             </label>
             <div className='pt-2'>
               <textarea 
-              placeholder='e.g. It&aposs always good to take a break. This fifteen minutes break will recharge the batteries a little'
+              placeholder="e.g. It's always good to take a break. This fifteen minutes break will recharge the batteries a little"
               style={{
                 resize: 'none'
               }}

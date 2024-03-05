@@ -7,10 +7,21 @@ type CounterState = {
 
 const initialState: CounterState = {
   isNavModalOpen: false,
+
   pageTitle: "",
+
   isAddOrEditBoardModalOpen: { isOpen: false, variant: "" },
+
   isAddOrEditTaskModalOpen: { isOpen: false, variant: "" },
-  isDeleteBoardOrTaskModalOpen: { isOpen: false, variant: "", name: "" },
+
+  isDeleteBoardOrTaskModal: { 
+    isOpen: false,
+    variant: "",
+    title: '',
+    status: "",
+    index: -1,  
+  },
+
   isTaskDetailsModalOpen: {
     isOpen: false,
     title: "",
@@ -25,7 +36,7 @@ export const modals = createSlice({
   initialState,
 
   reducers: {
-    openNavModal: (state) => {
+    openNavModal: (state: RootState) => {
       state.isNavModalOpen = true;
     },
 
@@ -59,15 +70,15 @@ export const modals = createSlice({
     },
 
     openDeleteBoardOrTaskModal: (state, { payload }) => {
-      state.isDeleteBoardOrTaskModalOpen.isOpen = true;
-      state.isDeleteBoardOrTaskModalOpen.variant = payload.variant;
-      state.isDeleteBoardOrTaskModalOpen.name = payload.name;
+      state.isDeleteBoardOrTaskModal.isOpen = true;
+      state.isDeleteBoardOrTaskModal.variant = payload.variant;
+      state.isDeleteBoardOrTaskModal.name = payload.name;
     },
 
     closeDeleteBoardOrTaskModal: (state) => {
-      state.isDeleteBoardOrTaskModalOpen.isOpen = false;
-      state.isDeleteBoardOrTaskModalOpen.variant = "";
-      state.isDeleteBoardOrTaskModalOpen.name = "";
+      state.isDeleteBoardOrTaskModal.isOpen = false;
+      state.isDeleteBoardOrTaskModal.variant = "";
+      state.isDeleteBoardOrTaskModal.name = "";
     },
 
     openTaskDetailsModal: (state, { payload }) => {
@@ -105,30 +116,52 @@ export const {
 
 export const getNavModalValue = (state: RootState) =>
   state.modals.isNavModalOpen;
+
 export const getAddOrEditBoardModalValue = (state: RootState) =>
   state.modals.isAddOrEditBoardModalOpen.isOpen;
+
 export const getAddOrEditBoardModalVariantValue = (state: RootState) =>
   state.modals.isAddOrEditBoardModalOpen.variant;
+
 export const getAddOrEditTaskModalValue = (state: RootState) =>
   state.modals.isAddOrEditTaskModalOpen.isOpen;
+
 export const getAddOrEditTaskModalVariantValue = (state: RootState) =>
   state.modals.isAddOrEditTaskModalOpen.variant;
+
+// Delete functionality
 export const getDeleteBoardOrTaskModalValue = (state: RootState) =>
-  state.modals.isDeleteBoardOrTaskModalOpen.isOpen;
+  state.modals.isDeleteBoardOrTaskModal.isOpen;
+
 export const getDeleteBoardOrTaskModalVariantValue = (state: RootState) =>
-  state.modals.isDeleteBoardOrTaskModalOpen.variant;
-export const getDeleteBoardOrTaskModalNameValue = (state: RootState) =>
-  state.modals.isDeleteBoardOrTaskModalOpen.name;
+  state.modals.isDeleteBoardOrTaskModal.variant;
+
+export const getDeleteBoardOrTaskModalTitle = (state: RootState) =>
+  state.modals.isDeleteBoardOrTaskModal.title;
+
+  // Selector function to retrieve title state value
+export const getDeleteTaskStatus = (state: RootState) =>
+  state.modals.isDeleteBoardOrTaskModal.status;
+
+// Selector function to retrieve title state value
+export const getDeleteTaskIndex = (state: RootState) =>
+  state.modals.isDeleteBoardOrTaskModal.index;
+
 export const getTaskDetailsModalValue = (state: RootState) =>
   state.modals.isTaskDetailsModalOpen.isOpen;
+
 export const getTaskDetailsModalTitle = (state: RootState) =>
   state.modals.isTaskDetailsModalOpen.title;
+
 export const getTaskDetailsModalDescription = (state: RootState) =>
   state.modals.isTaskDetailsModalOpen.description;
+
 export const getTaskDetailsModalSubtasks = (state: RootState) =>
   state.modals.isTaskDetailsModalOpen.subtasks;
+
 export const getTaskDetailsModalCompletedSubtasks = (state: RootState) =>
   state.modals.isTaskDetailsModalOpen.completedSubtasks;
+
 export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 
 export default modals.reducer;

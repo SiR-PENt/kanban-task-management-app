@@ -44,7 +44,7 @@ export const fireStoreApi = createApi({
           }
           return Promise.resolve({ data: null });
         } catch (e) {
-          return Promise.resolve({ error: e });
+          return Promise.reject({ error: e });
         }
       },
       invalidatesTags: ["Tasks"], // this will be used to invalidate the initially fetched data.
