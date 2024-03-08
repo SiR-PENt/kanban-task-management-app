@@ -12,22 +12,26 @@ const initialState: CounterState = {
 
   isAddOrEditBoardModalOpen: { isOpen: false, variant: "" },
 
-  isAddOrEditTaskModalOpen: { isOpen: false, variant: "" },
-
-  isDeleteBoardOrTaskModal: { 
+  isDeleteBoardOrTaskModal: {
     isOpen: false,
     variant: "",
-    title: '',
+    title: "",
     status: "",
-    index: -1,  
+    index: -1,
   },
 
-  isTaskDetailsModalOpen: {
+  isTaskDetailsModal: {
     isOpen: false,
     title: "",
     subtasks: [],
     completedSubtasks: "",
     description: "",
+    index: -1,
+  },
+
+  isAddOrEditTaskModal: {
+    isOpen: false,
+    variant: "",
   },
 };
 
@@ -59,16 +63,6 @@ export const modals = createSlice({
       state.isAddOrEditBoardModalOpen.variant = "";
     },
 
-    openAddOrEditTaskModal: (state, { payload }) => {
-      state.isAddOrEditTaskModalOpen.isOpen = true;
-      state.isAddOrEditTaskModalOpen.variant = payload;
-    },
-
-    closeAddOrEditTaskModal: (state) => {
-      state.isAddOrEditTaskModalOpen.isOpen = false;
-      state.isAddOrEditTaskModalOpen.variant = "";
-    },
-
     openDeleteBoardOrTaskModal: (state, { payload }) => {
       state.isDeleteBoardOrTaskModal.isOpen = true;
       state.isDeleteBoardOrTaskModal.variant = payload.variant;
@@ -81,21 +75,29 @@ export const modals = createSlice({
       state.isDeleteBoardOrTaskModal.name = "";
     },
 
+    // Open the Add and Edit task modal with a specified variant (add or edit)
+    openAddOrEditTaskModal: (state, { payload }) => {
+      state.isAddOrEditTaskModal.isOpen = true;
+      state.isAddOrEditTaskModal.variant = payload.variant;
+    },
+
+    // Close the Add and Edit task modal
+    closeAddOrEditTaskModal: (state) => {
+      state.isAddOrEditTaskModal.isOpen = false;
+      state.isAddOrEditTaskModal.variant = "";
+    },
+
     openTaskDetailsModal: (state, { payload }) => {
-      state.isTaskDetailsModalOpen.isOpen = true;
-      state.isTaskDetailsModalOpen.title = payload.title;
-      state.isTaskDetailsModalOpen.description = payload.description;
-      state.isTaskDetailsModalOpen.subtasks = payload.subtasks;
-      state.isTaskDetailsModalOpen.completedSubtasks =
-        payload.completedSubtasks;
+      state.isTaskDetailsModal.isOpen = true;
+      state.isTaskDetailsModal.title = payload.title;
+      state.isTaskDetailsModal.description = payload.description;
+      state.isTaskDetailsModal.subtasks = payload.subtasks;
+      state.isTaskDetailsModal.completedSubtasks = payload.completedSubtasks;
+      state.isTaskDetailsModal.index = payload.index;
     },
 
     closeTaskDetailsModal: (state) => {
-      state.isTaskDetailsModalOpen.isOpen = false;
-      state.isTaskDetailsModalOpen.title = "";
-      state.isTaskDetailsModalOpen.description = "";
-      state.isTaskDetailsModalOpen.subtasks = [];
-      state.isTaskDetailsModalOpen.completedSubtasks = "";
+      state.isTaskDetailsModal.isOpen = false;
     },
   },
 });
@@ -123,12 +125,6 @@ export const getAddOrEditBoardModalValue = (state: RootState) =>
 export const getAddOrEditBoardModalVariantValue = (state: RootState) =>
   state.modals.isAddOrEditBoardModalOpen.variant;
 
-export const getAddOrEditTaskModalValue = (state: RootState) =>
-  state.modals.isAddOrEditTaskModalOpen.isOpen;
-
-export const getAddOrEditTaskModalVariantValue = (state: RootState) =>
-  state.modals.isAddOrEditTaskModalOpen.variant;
-
 // Delete functionality
 export const getDeleteBoardOrTaskModalValue = (state: RootState) =>
   state.modals.isDeleteBoardOrTaskModal.isOpen;
@@ -147,20 +143,30 @@ export const getDeleteTaskStatus = (state: RootState) =>
 export const getDeleteTaskIndex = (state: RootState) =>
   state.modals.isDeleteBoardOrTaskModal.index;
 
+// add and edit task
+export const getAddOrEditTaskModalValue = (state: RootState) =>
+state.modals.isAddOrEditTaskModal.isOpen;
+// Selector function to retrieve variant state value 
+export const getAddOrEditTaskModalVariantValue = (state: RootState) =>
+state.modals.isAddOrEditTaskModal.variant;
+
 export const getTaskDetailsModalValue = (state: RootState) =>
-  state.modals.isTaskDetailsModalOpen.isOpen;
+  state.modals.isTaskDetailsModal.isOpen;
 
 export const getTaskDetailsModalTitle = (state: RootState) =>
-  state.modals.isTaskDetailsModalOpen.title;
+  state.modals.isTaskDetailsModal.title;
 
 export const getTaskDetailsModalDescription = (state: RootState) =>
-  state.modals.isTaskDetailsModalOpen.description;
+  state.modals.isTaskDetailsModal.description;
 
 export const getTaskDetailsModalSubtasks = (state: RootState) =>
-  state.modals.isTaskDetailsModalOpen.subtasks;
+  state.modals.isTaskDetailsModal.subtasks;
 
 export const getTaskDetailsModalCompletedSubtasks = (state: RootState) =>
-  state.modals.isTaskDetailsModalOpen.completedSubtasks;
+  state.modals.isTaskDetailsModal.completedSubtasks;
+
+export const getTaskDetailsModalIndex = (state: RootState) =>
+  state.modals.isTaskDetailsModal.index;
 
 export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 

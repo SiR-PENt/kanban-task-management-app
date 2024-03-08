@@ -6,7 +6,6 @@ import {
   closeTaskDetailsModal,
   getTaskDetailsModalValue,
 } from "@/components/redux/features/modalSlice";
-import TaskDetailsModal from "./ui/Modals/TaskDetails";
 
 export interface ISubtask {
     isCompleted: boolean;
@@ -25,11 +24,10 @@ interface ITasksProps {
   
   export default function Tasks({ tasks }: ITasksProps) {
 
-
     const dispatch = useAppDispatch()
 
-    const handleOpenModal = (title: string, description: string, subtasks: {[key: string]:any}[], completedSubtasks: number) => {
-      dispatch(openTaskDetailsModal({title, description, subtasks, completedSubtasks}))
+    const handleOpenModal = (title: string, description: string, subtasks: {[key: string]:any}[], completedSubtasks: number, index: number) => {
+      dispatch(openTaskDetailsModal({title, description, subtasks, completedSubtasks, index}))
     }
 
     return (
@@ -40,7 +38,7 @@ interface ITasksProps {
           
           return (
             <div
-              onClick={() => handleOpenModal(title, description, subtasks, completedSubtasks)}
+              onClick={() => handleOpenModal(title, description, subtasks, completedSubtasks, index)}
               key={index}
               className="dark:bg-dark-grey p-6 rounded-md mt-6 cursor-pointer">
               <p>{title}</p>

@@ -38,6 +38,7 @@ let addBoardData = {
 
 export default function AddOrEditBoardModal() {
   let { data } = useFetchDataFromDbQuery();
+  const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
   const modalVariant = useAppSelector(getAddOrEditBoardModalVariantValue);
   const isVariantAdd = modalVariant === "Add New Board";
   const [allBoards, setAllBoards] = useState<string[]>();
@@ -52,7 +53,6 @@ export default function AddOrEditBoardModal() {
     useState<boolean>(false);
 
   const currentBoardTitle = useAppSelector(getPageTitle);
-  const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
   const dispatch = useAppDispatch();
 
   const isModalOpen = useAppSelector(getAddOrEditBoardModalValue);

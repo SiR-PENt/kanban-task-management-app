@@ -18,7 +18,7 @@ export default function Modal({
 
   const modalStyle = {
     overlay: {
-      zIndex: "900000",
+      zIndex: "9000",
       backgroundColor: "rgba(0,0,0,0.45)",
       display: "flex",
       justifyContent: "center",
@@ -89,8 +89,9 @@ export function CRUDModal({ children, isOpen, onRequestClose }: ModalProps) {
 
 interface ModalBody {
   children: React.ReactNode;
+  className?: string;
 }
 
-export function ModalBody({ children }: ModalBody) {
-  return <div className="w-[21.4rem] md:w-[30rem] p-8">{children}</div>;
+export function ModalBody({ children, className }: ModalBody) {
+  return <div className={`w-[21.4rem] md:w-[30rem] p-8 ${className!}`}>{children}</div>;
 }
