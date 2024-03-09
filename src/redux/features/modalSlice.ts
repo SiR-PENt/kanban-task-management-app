@@ -15,9 +15,6 @@ const initialState: CounterState = {
   isDeleteBoardOrTaskModal: {
     isOpen: false,
     variant: "",
-    title: "",
-    status: "",
-    index: -1,
   },
 
   isTaskDetailsModal: {
@@ -27,6 +24,7 @@ const initialState: CounterState = {
     completedSubtasks: "",
     description: "",
     index: -1,
+    status: "",
   },
 
   isAddOrEditTaskModal: {
@@ -94,6 +92,7 @@ export const modals = createSlice({
       state.isTaskDetailsModal.subtasks = payload.subtasks;
       state.isTaskDetailsModal.completedSubtasks = payload.completedSubtasks;
       state.isTaskDetailsModal.index = payload.index;
+      state.isTaskDetailsModal.status = payload.status;
     },
 
     closeTaskDetailsModal: (state) => {
@@ -132,17 +131,6 @@ export const getDeleteBoardOrTaskModalValue = (state: RootState) =>
 export const getDeleteBoardOrTaskModalVariantValue = (state: RootState) =>
   state.modals.isDeleteBoardOrTaskModal.variant;
 
-export const getDeleteBoardOrTaskModalTitle = (state: RootState) =>
-  state.modals.isDeleteBoardOrTaskModal.title;
-
-  // Selector function to retrieve title state value
-export const getDeleteTaskStatus = (state: RootState) =>
-  state.modals.isDeleteBoardOrTaskModal.status;
-
-// Selector function to retrieve title state value
-export const getDeleteTaskIndex = (state: RootState) =>
-  state.modals.isDeleteBoardOrTaskModal.index;
-
 // add and edit task
 export const getAddOrEditTaskModalValue = (state: RootState) =>
 state.modals.isAddOrEditTaskModal.isOpen;
@@ -167,6 +155,9 @@ export const getTaskDetailsModalCompletedSubtasks = (state: RootState) =>
 
 export const getTaskDetailsModalIndex = (state: RootState) =>
   state.modals.isTaskDetailsModal.index;
+
+export const getTaskDetailsModalStatus = (state: RootState) =>
+  state.modals.isTaskDetailsModal.status;
 
 export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 

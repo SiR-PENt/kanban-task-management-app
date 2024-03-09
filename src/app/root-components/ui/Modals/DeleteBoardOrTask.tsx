@@ -4,10 +4,10 @@ import {
   getDeleteBoardOrTaskModalValue,
   closeDeleteBoardOrTaskModal,
   getDeleteBoardOrTaskModalVariantValue,
-  getDeleteBoardOrTaskModalTitle,
-  getDeleteTaskIndex,
-  getDeleteTaskStatus,
   getPageTitle,
+  getTaskDetailsModalTitle,
+  getTaskDetailsModalStatus,
+  getTaskDetailsModalIndex
 } from "@/components/redux/features/modalSlice";
 import Button from "../Button";
 import {
@@ -22,9 +22,9 @@ export default function DeleteBoardOrTaskModal() {
   const isModalOpen = useAppSelector(getDeleteBoardOrTaskModalValue);
   const closeModal = () => dispatch(closeDeleteBoardOrTaskModal());
   const modalVariant = useAppSelector(getDeleteBoardOrTaskModalVariantValue);
-  const modalOrTaskTitle = useAppSelector(getDeleteBoardOrTaskModalTitle);
-  const taskIndex = useAppSelector(getDeleteTaskIndex);
-  const taskStatus = useAppSelector(getDeleteTaskStatus);
+  const taskTitle = useAppSelector(getTaskDetailsModalTitle); 
+  const taskIndex = useAppSelector(getTaskDetailsModalIndex);
+  const taskStatus = useAppSelector(getTaskDetailsModalStatus);
   const pageTitle = useAppSelector(getPageTitle);
   let { data } = useFetchDataFromDbQuery();
   const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
@@ -75,10 +75,10 @@ export default function DeleteBoardOrTaskModal() {
             closeModal()
           }
         }
-      }
-     
+      }   
     };
 
+    
   return (
     <CRUDModal isOpen={isModalOpen} onRequestClose={closeModal}>
       <ModalBody>
@@ -86,9 +86,9 @@ export default function DeleteBoardOrTaskModal() {
         <div className="pt-6">
           <p className="text-sm text-medium-grey leading-6">
             {modalVariant === "Delete this board?"
-              ? `Are you sure you want to delete the '${modalOrTaskTitle}' board? This action will remove all columns
+              ? `Are you sure you want to delete the '${pageTitle}' board? This action will remove all columns
                 and tasks and cannot be reversed.`
-              : `Are you sure you want to delete the '${modalOrTaskTitle}' tasks and its subtasks? This action cannot be reversed.`}
+              : `Are you sure you want to delete the '${taskTitle}' tasks and its subtasks? This action cannot be reversed.`}
           </p>
         </div>
         <div className="pt-6 flex space-x-2">

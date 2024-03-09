@@ -16,6 +16,7 @@ interface ITask {
     title: string;
     subtasks: ISubtask[];
     description: string,
+    status: string,
   }
   
 interface ITasksProps {
@@ -26,19 +27,19 @@ interface ITasksProps {
 
     const dispatch = useAppDispatch()
 
-    const handleOpenModal = (title: string, description: string, subtasks: {[key: string]:any}[], completedSubtasks: number, index: number) => {
-      dispatch(openTaskDetailsModal({title, description, subtasks, completedSubtasks, index}))
+    const handleOpenModal = (title: string, description: string, subtasks: {[key: string]:any}[], completedSubtasks: number, index: number, status:string) => {
+      dispatch(openTaskDetailsModal({title, description, subtasks, completedSubtasks, index, status }))
     }
 
     return (
         tasks && tasks.map((task, index) => {
 
-          const { title, subtasks, description } = task;
+          const { title, subtasks, description, status } = task;
           const completedSubtasks = subtasks?.filter((subtask) => subtask?.isCompleted === true).length;
           
           return (
             <div
-              onClick={() => handleOpenModal(title, description, subtasks, completedSubtasks, index)}
+              onClick={() => handleOpenModal( title, description, subtasks, completedSubtasks, index, status )}
               key={index}
               className="dark:bg-dark-grey p-6 rounded-md mt-6 cursor-pointer">
               <p>{title}</p>

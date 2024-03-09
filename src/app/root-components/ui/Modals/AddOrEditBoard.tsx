@@ -203,7 +203,6 @@ export default function AddOrEditBoardModal() {
             }
           }
         }
-
         if (!areArrays && val1 !== val2) {
           return false
         }

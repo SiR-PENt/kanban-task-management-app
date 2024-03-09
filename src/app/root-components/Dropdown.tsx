@@ -13,7 +13,6 @@ interface IDropdown {
 
 export default function BoardDropdown({ show }: IDropdown) {
   const dispatch = useAppDispatch();
-  const boardName = useAppSelector(getPageTitle);
 
   return (
     <div
@@ -35,7 +34,6 @@ export default function BoardDropdown({ show }: IDropdown) {
             dispatch(
               openDeleteBoardOrTaskModal({
                 variant: "Delete this board?",
-                name: boardName,
               })
             )
           }
@@ -56,6 +54,12 @@ export function TaskDropdown({ show }: IDropdown) {
     dispatch(closeTaskDetailsModal())
   }
 
+  const openDeleteTaskModal = () => {
+    dispatch(openDeleteBoardOrTaskModal({ variant: "Edit Task", isOpen: true }));
+    dispatch(closeTaskDetailsModal())
+  }
+
+
   return (
     <div
       className={`${
@@ -64,7 +68,6 @@ export function TaskDropdown({ show }: IDropdown) {
     >
       <div>
         <button
-          // onClick={() => dispatch(openAddOrEditBoardModal('Edit Board'))}
           onClick={openEditTaskModal}
           className="text-sm py-2 text-medium-grey"
         >
@@ -73,7 +76,7 @@ export function TaskDropdown({ show }: IDropdown) {
       </div>
       <div>
         <button
-          // onClick={() => dispatch(openDeleteBoardOrTaskModal({ variant:'Delete this board?', name: boardName }))}
+          onClick={openDeleteTaskModal}
           className="text-sm py-2 text-red"
         >
           Delete Task
