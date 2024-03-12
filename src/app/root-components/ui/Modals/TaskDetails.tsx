@@ -29,8 +29,9 @@ export default function TaskDetailsModal() {
   const closeModal = () => {
      dispatch(closeTaskDetailsModal());
   }
-  
-   const [show, setShow] = useState<boolean>(false);
+
+  const [show, setShow] = useState<boolean>(false);
+  const [options, setOptions] = useState<[]>();
   const isModalOpen = useAppSelector(getTaskDetailsModalValue);
   const title = useAppSelector(getTaskDetailsModalTitle);
   const description = useAppSelector(getTaskDetailsModalDescription);
@@ -77,7 +78,12 @@ export default function TaskDetailsModal() {
               }
             )}
         </div>
-        <p>Current Status</p>
+        <p className='mt-6 text-sm'>Current Status</p>
+        <select className='w-full dark:bg-dark-grey p-2 mt-2 outline-none dark:border-red'>
+         <option>Doing</option>
+         <option>Hey</option>
+         <option>Doing</option>
+        </select>
       </ModalBody>
     </CRUDModal>
   );

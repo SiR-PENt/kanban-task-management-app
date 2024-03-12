@@ -97,13 +97,13 @@ export default function AddOrEditBoardModal() {
     }
   };
 
-  const handleColumnNameChange = (name: string) => {
+  const handleColumnNameChange = (index: number) => {
     return function (e: React.ChangeEvent<HTMLInputElement>) {
       // handle change for create new board modal
       if (boardData) {
         const modifyColumns = boardData.columns.map(
-          (column: { name?: string }) => {
-            if (column.name === name) {
+          (column, columnIndex) => {
+            if (columnIndex === index) {
               return { ...column, name: e.target.value };
             }
             return column;
@@ -213,15 +213,16 @@ export default function AddOrEditBoardModal() {
 
   const handleEditBoard = async () => {
 
-    const emptyColumnStringChecker = boardData?.columns.some(
-      (column) => column.name === ""
-    );
-
-       //condition to run if the board name is empty
+    
+    //condition to run if the board name is empty
     if (boardData?.name === "") {
       setIsBoardNameEmpty(true);
     }
-
+    
+    const emptyColumnStringChecker = boardData?.columns.some(
+      (column) => column.name === ""
+    );
+    
     //if any of the column names is empty, update the emptyColumnIndex with its index
     if (emptyColumnStringChecker) {
       const emptyColumn = boardData?.columns.findIndex(
@@ -261,21 +262,28 @@ export default function AddOrEditBoardModal() {
           <>
             <p>{modalVariant}</p>
             <div className="py-6">
-              <InputWithLabel
-                label="Board Name"
-                placeholder="e.g Web Design"
-                onChange={handleBoardNameChange}
-                value={boardData.name}
-              />
+              <div className="relative">
+                <InputWithLabel
+                  label="Board Name"
+                  placeholder="e.g Web Design"
+                  onChange={handleBoardNameChange}
+                  value={boardData.name}
+                  isError={isBoardNameEmpty || boardAlreadyExistsChecker}
+                />
 
-              {/* display this error if the board name is empty or if the board already exists */}
-              {isBoardNameEmpty ? (
-                <p className="text-xs text-red">Board name cannot be empty</p>
-              ) : boardAlreadyExistsChecker ? (
-                <p className="text-xs text-red">Board already exists</p>
-              ) : (
-                ""
-              )}
+                {/* display this error if the board name is empty or if the board already exists */}
+                {isBoardNameEmpty ? (
+                  <p className="text-xs text-red absolute right-2 top-2/3">
+                    Can&apos;t be empty
+                  </p>
+                ) : boardAlreadyExistsChecker ? (
+                  <p className="text-xs text-red absolute right-2 top-2/3">
+                    Board already exists
+                  </p>
+                ) : (
+                  ""
+                )}
+              </div>
 
               <div className="pt-6">
                 {boardData.columns.length > 0 ? (
@@ -286,19 +294,20 @@ export default function AddOrEditBoardModal() {
                         (column: { name?: string }, index: number) => {
                           let { name } = column;
                           return (
-                            <div key={index} className="pt-2">
+                            <div key={index} className="pt-2 relative">
                               <InputWithDeleteIcon
                                 onChange={(e) =>
-                                  handleColumnNameChange(name!)(e)
+                                  handleColumnNameChange(index!)(e)
                                 }
                                 onDelete={() => handleDeleteColumn(index)}
                                 value={name!}
                                 placeholder="e.g Done"
+                                isError={emptyColumnIndex === index}
                               />
                               {/* display this error if the board name is empty */}
                               {emptyColumnIndex === index ? (
-                                <p className="text-xs text-red">
-                                  Column name cannot be empty
+                                <p className="text-xs text-red absolute right-8 top-1/2">
+                                  Can&apos;t be empty
                                 </p>
                               ) : (
                                 ""

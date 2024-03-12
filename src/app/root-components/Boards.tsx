@@ -1,8 +1,8 @@
 'use client'
 
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice"
-import { useAppSelector } from "@/components/redux/hooks"
-import { getPageTitle } from "@/components/redux/features/modalSlice"
+import { useAppSelector, useAppDispatch } from "@/components/redux/hooks"
+import { getPageTitle, openAddOrEditBoardModal } from "@/components/redux/features/modalSlice"
 import { useEffect, useState } from "react"
 import Image from 'next/image'
 import Tasks from "./Tasks"
@@ -20,6 +20,7 @@ export default function Boards() {
     const activeBoard = useAppSelector(getPageTitle)
     const { data } = useFetchDataFromDbQuery()
 
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
       if(data !== undefined) {
@@ -55,9 +56,7 @@ export default function Boards() {
             })}
             {columns.length < 7 ? (
               <div
-                // onClick={() =>
-                //   dispatch(openAddAndEditBoardModal("Edit Board"))
-                // }
+                 onClick={() => dispatch(openAddOrEditBoardModal("Edit Board"))}
                 className="rounded-md dark:bg-dark-grey w-[17.5rem] mt-12 shrink-0 flex justify-center items-center"
               >
                 <p className="cursor-pointer font-bold text-medium-grey text-2xl">
@@ -75,7 +74,7 @@ export default function Boards() {
                 This board is empty. Create a new column to get started.
               </p>
               <button
-                // onClick={() => dispatch(openAddOrEditTaskModal('Add New Task'))}
+                onClick={() => dispatch(openAddOrEditBoardModal("Edit Board"))}
                 className="bg-main-purple text-white px-4 py-2 flex mt-6 rounded-3xl items-center space-x-2"
               >
                 <Image src={addTask} alt="icon-add-task" />
