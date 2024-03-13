@@ -18,6 +18,8 @@
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.4",
     "firebase": "^10.0.0",
+    "flowbite": "^2.3.0",
+    "flowbite-react": "^0.7.3",
     "next": "^13.4.9",
     "next-auth": "^4.22.1",
     "next-redux-wrapper": "^8.1.0",
