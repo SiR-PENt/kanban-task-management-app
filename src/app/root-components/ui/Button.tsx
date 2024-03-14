@@ -1,5 +1,5 @@
-import { CSSProperties } from "react";
 import { cva, VariantProps } from "class-variance-authority";
+import { CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const override: CSSProperties = {

@@ -142,7 +142,7 @@ export default function AddOrEditTaskModal() {
   };
 
   // Handler for task status change
-  const handleTaskStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTaskStatusChange = (e) => {
     if (taskData) setTaskData({ ...taskData, status: e.target.value });
   };
 
@@ -247,7 +247,6 @@ export default function AddOrEditTaskModal() {
 
   const handleEditTaskToDb = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(taskData)
     const { title, status, description, subtasks } = taskData!;
 
     if (!title) {
@@ -436,33 +435,28 @@ export default function AddOrEditTaskModal() {
             </div>
 
             <div className="relative">
-              <InputWithLabel
-                label="Status"
-                value={taskData.status}
-                onChange={handleTaskStatusChange}
-                placeholder={options?.join(", ")!}
-                isError={isTaskStatusEmpty || !statusExists}
-              />
-              {isTaskStatusEmpty ? (
-                <p className="text-xs text-red absolute right-2 top-2/3">
-                  Can&apos;t be empty
-                </p>
-              ) : !statusExists ? (
-                <p className="text-xs text-red absolute right-2 top-2/3">
-                  Status does not exists
-                </p>
-              ) : (
-                ""
-              )}
-
-              {/* <label>
-                Subtasks
-                </label>
-             <CustomSelect
-              options={options}
-              value={taskData.status}
-              // onChange={handleStatusChange}
-              /> */}
+              <p className="mt-6 text-sm">Current Status</p>
+              <select
+                id="status"
+                className="outline-none border text-sm rounded-lg block w-full p-2.5 mt-4 placeholder:text-medium-grey border-medium-grey
+               dark:focus:ring-main-purple dark:focus:border-main-purple dark:bg-dark-grey"
+                onChange={(e) => handleTaskStatusChange(e)}
+              >
+                {options?.map((option) => {
+                  if (option === taskData.status) {
+                    return (
+                      <option selected={option} key={option} value={option}>
+                        {option}
+                      </option>
+                    );
+                  }
+                  return (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
             <div className="pt-6">
               <Button
