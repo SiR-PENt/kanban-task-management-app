@@ -10,6 +10,8 @@ const initialState: CounterState = {
 
   pageTitle: "",
 
+  activeBoardIndex: 0,
+
   isAddOrEditBoardModalOpen: { isOpen: false, variant: "" },
 
   isDeleteBoardOrTaskModal: {
@@ -44,6 +46,10 @@ export const modals = createSlice({
 
     closeNavModal: (state) => {
       state.isNavModalOpen = false;
+    },
+
+    setActiveBoardIndex: (state, { payload }) => {
+       state.activeBoardIndex = payload;
     },
 
     setPageTitle: (state, { payload }) => {
@@ -113,10 +119,15 @@ export const {
   closeDeleteBoardOrTaskModal,
   openTaskDetailsModal,
   closeTaskDetailsModal,
+  setActiveBoardIndex,
 } = modals.actions;
 
 export const getNavModalValue = (state: RootState) =>
   state.modals.isNavModalOpen;
+
+export const getActiveBoardIndex = ( state: RootState) => {
+  state.modals.activeBoardIndex;
+}
 
 export const getAddOrEditBoardModalValue = (state: RootState) =>
   state.modals.isAddOrEditBoardModalOpen.isOpen;

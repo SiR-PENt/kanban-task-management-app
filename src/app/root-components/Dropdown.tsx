@@ -55,7 +55,7 @@ export function TaskDropdown({ show }: IDropdown) {
   }
 
   const openDeleteTaskModal = () => {
-    dispatch(openDeleteBoardOrTaskModal({ variant: "Edit Task", isOpen: true }));
+    dispatch(openDeleteBoardOrTaskModal({ variant: "Delete this task?", isOpen: true }));
     dispatch(closeTaskDetailsModal())
   }
 

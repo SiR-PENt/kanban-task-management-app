@@ -9,7 +9,6 @@ import iconBoardWhite from '../../../../../../public/icon-board-white.png'
 import Image from "next/image";
 import NavModalFooter from "./Footer";
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
-import { getUserDetails } from "@/components/redux/features/userSlice";
 import { useState, useEffect } from "react";
 import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
 
@@ -28,7 +27,7 @@ export default function NavModal() {
 
     useEffect(() => {
       if(data) {
-        const activeBoard = data[0]?.boards.find((item:any, index:number) => index === active)
+        const activeBoard = data[0]?.boards.find((_item:any, index:number) => index === active)
         dispatch(setPageTitle(activeBoard?.name))
       }
     }, [data])

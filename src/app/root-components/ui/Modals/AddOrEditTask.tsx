@@ -19,8 +19,6 @@ import {
 import InputWithLabel from "./components/InputWithLabel";
 import InputWithDeleteIcon from "./components/InputWithDeleteIcon";
 import Button from "../Button";
-import CustomSelect from "./components/Select";
-import { ActionMeta } from "react-select";
 
 interface ITaskData {
   title: string;
@@ -42,13 +40,13 @@ let initialTaskData: ITaskData = {
 };
 
 export default function AddOrEditTaskModal() {
+  
   let { data } = useFetchDataFromDbQuery();
   const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
   const [taskData, setTaskData] = useState<ITaskData>();
   const [isTaskTitleEmpty, setIsTaskTitleEmpty] = useState<boolean>();
   const [emptySubtaskIndex, setEmptySubtaskIndex] = useState<number>();
   const [isTaskStatusEmpty, setIsTaskStatusEmpty] = useState<boolean>();
-  const [statusExists, setStatusExists] = useState<boolean>(true);
   const [options, setOptions] = useState<[]>();
   const dispatch = useAppDispatch();
   const isModalOpen = useAppSelector(getAddOrEditTaskModalValue);
@@ -91,10 +89,10 @@ export default function AddOrEditTaskModal() {
       setIsTaskTitleEmpty(false);
       setIsTaskStatusEmpty(false);
       setEmptySubtaskIndex(undefined);
-      setStatusExists(true);
+
     }, 3000);
     return () => clearTimeout(timeoutId);
-  }, [isTaskTitleEmpty, isTaskStatusEmpty, emptySubtaskIndex, statusExists]);
+  }, [isTaskTitleEmpty, isTaskStatusEmpty, emptySubtaskIndex ]);
 
   const handleTaskTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (taskData) setTaskData({ ...taskData, title: e.target.value });
@@ -136,8 +134,7 @@ export default function AddOrEditTaskModal() {
     const newSubtask = { title: "", isCompleted: false };
 
     if (taskData) {
-      taskData.subtasks.push(newSubtask);
-      setTaskData({ ...taskData, subtasks: taskData.subtasks });
+      setTaskData({ ...taskData, subtasks: [...taskData.subtasks, newSubtask] });
     }
   };
 
@@ -173,17 +170,9 @@ export default function AddOrEditTaskModal() {
       setIsTaskStatusEmpty(true);
     }
 
-    // check if the status input exists among the existing columns
-    const doesStatusExists = options?.some(
-      (option) => option === taskData?.status
-    );
-
-    if (!doesStatusExists) {
-      setStatusExists(false);
-    }
 
     // if all conditions are met
-    if (title && status && doesStatusExists && emptySubtaskIndex) {
+    if (title && status && emptySubtaskIndex) {
       if (data) {
         const [boards] = data;
         const boardsCopy = [...boards.boards];
@@ -269,15 +258,7 @@ export default function AddOrEditTaskModal() {
       setIsTaskStatusEmpty(true);
     }
 
-    const doesStatusExists = options?.some(
-      (option) => option === taskData?.status
-    );
-
-    if (!doesStatusExists) {
-      setStatusExists(false);
-    }
-
-    if (title && status && doesStatusExists && emptySubtaskStringChecker) {
+    if (title && status && emptySubtaskStringChecker) {
       if (data) {
         const [boards] = data;
         const boardsCopy = [...boards.boards];
@@ -363,8 +344,8 @@ export default function AddOrEditTaskModal() {
       <ModalBody>
         <p>{modalVariant}</p>
         {taskData && (
-          <div className="py-6 relative">
-            <div>
+          <div className="py-6">
+            <div className='relative'>
               <InputWithLabel
                 label="Title"
                 value={taskData.title}

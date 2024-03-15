@@ -69,9 +69,8 @@ export default function TaskDetailsModal() {
         setTaskDetails(activeTask);
       }
     }
-
-    return () => setTaskDetails(undefined);
-  }, [data, currentTaskTitle]);
+    return () => setTaskDetails(undefined)
+  }, [data, currentTaskTitle, currentBoardTitle]);
 
   const handleIsCompletedStatus = async (subtaskIndex: number) => {
     setSubtaskIndex(subtaskIndex);
@@ -129,31 +128,39 @@ export default function TaskDetailsModal() {
   const handleStatusChange = (e: React.FormEvent<HTMLSelectElement>) => {
     let value = e.target.value;
     const { title, status, description, subtasks } = taskDetails!;
+    console.log(taskDetails);
     if (status !== value) {
       if (data) {
         const [boards] = data;
         const boardsCopy = [...boards.boards];
+
         const activeBoard = boardsCopy.find(
           (board: { name: string }) => board.name === currentBoardTitle
         );
+
         const activeBoardIndex = boardsCopy.findIndex(
           (board: { name: string }) => board.name === currentBoardTitle
         );
+
         const { columns } = activeBoard;
         const getStatusColumnIndex = columns?.findIndex(
           (column: { name: string }) => column.name === value
         );
+
         // Find the column with the name in the task status and append the edited task
         const getStatusColumn = columns?.find(
           (column: { name: string }) => column.name === value
         );
+
         // delete task from previous column
         const getPrevStatusColumn = columns?.find(
           (column: { name: string }) => column.name === status
         );
+
         const getPrevStatusColumnIndex = columns?.findIndex(
           (column: { name: string }) => column.name === status
         );
+
         //update the previous column of the task
         const updatedPrevStatusColumn = {
           ...getPrevStatusColumn,

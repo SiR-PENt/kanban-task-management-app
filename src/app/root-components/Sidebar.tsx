@@ -1,7 +1,7 @@
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import Image from "next/image";
 import { useAppDispatch } from "@/components/redux/hooks";
-import { setPageTitle } from "@/components/redux/features/modalSlice";
+import { setPageTitle, setActiveBoardIndex } from "@/components/redux/features/modalSlice";
 import { useState, useEffect } from "react";
 import iconBoard from "../../.././public/icon-board.svg";
 import iconBoardPurple from "../../.././public/icon-board-purple.png";
@@ -26,6 +26,15 @@ export default function Sidebar() {
     setActive(index);
     dispatch(setPageTitle(name));
   };
+
+   useEffect(() => {
+     if (data) {
+       const activeBoard = data[0]?.boards.find(
+         (_item: any, index: number) => index === active
+       );
+       dispatch(setPageTitle(activeBoard?.name));
+     }
+   }, [ data ])
 
   const { theme, setTheme } = useTheme();
 
