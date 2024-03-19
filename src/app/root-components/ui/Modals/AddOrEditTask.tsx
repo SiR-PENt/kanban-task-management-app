@@ -166,13 +166,9 @@ export default function AddOrEditTaskModal() {
       setIsTaskTitleEmpty(true);
     }
 
-    if (!status) {
-      setIsTaskStatusEmpty(true);
-    }
-
 
     // if all conditions are met
-    if (title && status && emptySubtaskIndex) {
+    if (title && !emptySubtaskStringChecker) {
       if (data) {
         const [boards] = data;
         const boardsCopy = [...boards.boards];
@@ -253,12 +249,7 @@ export default function AddOrEditTaskModal() {
       setEmptySubtaskIndex(emptyColumn);
     }
 
-    // check if the status input exists among the existing status
-    if (!status) {
-      setIsTaskStatusEmpty(true);
-    }
-
-    if (title && status && emptySubtaskStringChecker) {
+    if (title && !emptySubtaskStringChecker) {
       if (data) {
         const [boards] = data;
         const boardsCopy = [...boards.boards];

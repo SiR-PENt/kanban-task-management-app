@@ -69,7 +69,7 @@ export default function TaskDetailsModal() {
         setTaskDetails(activeTask);
       }
     }
-    return () => setTaskDetails(undefined)
+    return () => setTaskDetails(undefined);
   }, [data, currentTaskTitle, currentBoardTitle]);
 
   const handleIsCompletedStatus = async (subtaskIndex: number) => {
@@ -128,7 +128,6 @@ export default function TaskDetailsModal() {
   const handleStatusChange = (e: React.FormEvent<HTMLSelectElement>) => {
     let value = e.target.value;
     const { title, status, description, subtasks } = taskDetails!;
-    console.log(taskDetails);
     if (status !== value) {
       if (data) {
         const [boards] = data;
@@ -231,7 +230,8 @@ export default function TaskDetailsModal() {
                     return (
                       <div
                         key={index}
-                        className="mt-4 px-4 py-4 dark:text-medium-grey dark:bg-very-dark-grey w-full flex items-center space-x-4"
+                        className="mt-4 px-4 py-4 dark:text-medium-grey dark:bg-very-dark-grey w-full flex 
+                        items-center space-x-4 dark:hover:bg-main-purple dark:hover:text-white cursor-pointer transition ease-in duration-150 delay-150"
                       >
                         {isLoading ? (
                           index === subtaskIndex ? (
@@ -251,7 +251,7 @@ export default function TaskDetailsModal() {
                               onChange={() => handleIsCompletedStatus(index)}
                               className="w-4 h-4 text-blue-600 bg-gray-100
                       dark:border-medium-grey rounded focus:ring-main-purple 
-                       dark:focus:ring-main-purple focus:ring-2 dark:bg-dark-grey"
+                       dark:focus:ring-main-purple focus:ring-2 dark:bg-dark-gre"
                             />
                           )
                         ) : (
@@ -271,7 +271,7 @@ export default function TaskDetailsModal() {
                             !isCompleted
                               ? "dark:text-white"
                               : "dark:text-medium-grey"
-                          } text-sm`}
+                          } text-sm dark:hover:text-white cursor-pointer w-full`}
                         >
                           {title}
                         </label>

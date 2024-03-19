@@ -11,9 +11,12 @@ const override: CSSProperties = {
 const buttonStyles = cva("rounded-3xl py-2 w-full text-sm font-bold", {
   variants: {
     intent: {
-      primary: "bg-white text-main-purple",
-      secondary: "bg-main-purple text-white",
-      danger: "bg-red text-white",
+      primary:
+        "bg-white text-main-purple transition ease-in duration-150 delay-150",
+      secondary:
+        "bg-main-purple text-white dark:hover:bg-primary transition ease-in duration-150 delay-150",
+      danger:
+        "bg-red text-white transition ease-in duration-150 delay-150 hover:bg-light-red",
     },
     defaultVariants: {
       intent: "primary",

@@ -1,7 +1,10 @@
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import Image from "next/image";
 import { useAppDispatch } from "@/components/redux/hooks";
-import { setPageTitle, setActiveBoardIndex } from "@/components/redux/features/modalSlice";
+import {
+  setPageTitle,
+  setActiveBoardIndex,
+} from "@/components/redux/features/modalSlice";
 import { useState, useEffect } from "react";
 import iconBoard from "../../.././public/icon-board.svg";
 import iconBoardPurple from "../../.././public/icon-board-purple.png";
@@ -27,14 +30,14 @@ export default function Sidebar() {
     dispatch(setPageTitle(name));
   };
 
-   useEffect(() => {
-     if (data) {
-       const activeBoard = data[0]?.boards.find(
-         (_item: any, index: number) => index === active
-       );
-       dispatch(setPageTitle(activeBoard?.name));
-     }
-   }, [ data ])
+  useEffect(() => {
+    if (data) {
+      const activeBoard = data[0]?.boards.find(
+        (_item: any, index: number) => index === active
+      );
+      dispatch(setPageTitle(activeBoard?.name));
+    }
+  }, [data]);
 
   const { theme, setTheme } = useTheme();
 
@@ -53,7 +56,7 @@ export default function Sidebar() {
         className={`${
           !showSidebar
             ? "w-0 overflow-hidden"
-            : "w-[18.75rem] flex-none dark:bg-dark-grey h-full py-6 pr-6"
+            : "w-[18.75rem] flex-none bg-white dark:bg-dark-grey h-full py-6 pr-6"
         }
           transition-width duration-150 ease-out relative`}
       >
@@ -72,22 +75,16 @@ export default function Sidebar() {
                     key={index}
                     className={`${
                       isActive
-                        ? "bg-main-purple rounded-tr-full rounded-br-full"
-                        : ""
-                    } cursor-pointer flex items-center space-x-2 pl-[2.12rem] py-3 pb-3`}
+                        ? "bg-main-purple text-white"
+                        : "text-medium-grey transition ease-in duration-150 delay-150 dark:hover:bg-white dark:hover:text-main-purple"
+                    } cursor-pointer rounded-tr-full rounded-br-full flex items-center space-x-2 pl-[2.12rem] py-3 pb-3`}
                   >
                     {isActive ? (
                       <Image src={iconBoardWhite} alt="active board icon" />
                     ) : (
                       <Image src={iconBoard} alt="board icon" />
                     )}
-                    <p
-                      className={`${
-                        isActive ? "text-white" : "text-medium-grey"
-                      } text-lg capitalize`}
-                    >
-                      {name}
-                    </p>
+                    <p className="text-lg capitalize">{name}</p>
                   </div>
                 );
               }
@@ -108,43 +105,47 @@ export default function Sidebar() {
         <footer
           className={`${
             !showSidebar ? "hidden" : "block"
-          } absolute bottom-0 p-6 w-full`}
+          } absolute bottom-0 py-6 pr-6 w-full`}
         >
-          <div className="h-[3rem] rounded-md flex justify-center items-center space-x-6 bg-light-grey dark:bg-very-dark-grey w-full">
-            <Image
-              src={iconLightTheme}
-              alt="board icon"
-              className="object-contain"
-            />
-            <div
-              onClick={() =>
-                theme === "light" ? setTheme("dark") : setTheme("light")
-              }
-              className="w-9 h-5 rounded-2xl px-px relative bg-main-purple flex items-center cursor-pointer"
-            >
+          <div className="pl-6">
+            <div className="h-[3rem] rounded-md flex justify-center items-center space-x-6 bg-light-grey dark:bg-very-dark-grey w-full">
+              <Image
+                src={iconLightTheme}
+                alt="board icon"
+                className="object-contain"
+              />
               <div
-                className={`w-4 h-4 rounded-full bg-white absolute ${
-                  theme === "light" ? "left-0" : "right-0"
-                }`}
+                onClick={() =>
+                  theme === "light" ? setTheme("dark") : setTheme("light")
+                }
+                className="w-9 h-5 rounded-2xl px-px relative hover:bg-primary bg-main-purple flex items-center cursor-pointer"
+              >
+                <div
+                  className={`w-4 h-4 rounded-full bg-white absolute ${
+                    theme === "light" ? "left-0" : "right-0"
+                  }`}
+                />
+              </div>
+              <Image
+                src={iconDarkTheme}
+                alt="board icon"
+                className="object-contain"
               />
             </div>
-            <Image
-              src={iconDarkTheme}
-              alt="board icon"
-              className="object-contain"
-            />
           </div>
 
           <div
             onClick={() => setShowSidebar(!showSidebar)}
-            className="cursor-pointer flex mt-5"
+            className="dark:hover:bg-white py-3 pb-3 pl-6 cursor-pointer flex mt-5 transition ease-in duration-150 delay-150 rounded-tr-full rounded-br-full"
           >
             <Image
               src={iconHideSidebar}
               alt="hide sidebar"
               className="object-contain"
             />
-            <p className="text-medium-grey ml-2 text-xs">Hide Sidebar</p>
+            <p className="text-medium-grey ml-2 text-sm hover:text-main-purple">
+              Hide Sidebar
+            </p>
           </div>
         </footer>
       </aside>
@@ -152,7 +153,7 @@ export default function Sidebar() {
         onClick={() => setShowSidebar(!showSidebar)}
         className={`${
           !showSidebar ? "block" : "hidden"
-        } cursor-pointer h-12 w-14 bg-main-purple absolute left-full rounded-tr-full rounded-br-full 
+        } cursor-pointer h-12 w-14 bg-main-purple dark:hover:bg-primary transition ease-in duration-150 delay-150 absolute left-full rounded-tr-full rounded-br-full 
             bottom-4 flex items-center justify-center`}
       >
         <Image

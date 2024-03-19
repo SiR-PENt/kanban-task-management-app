@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import logo from "../../../public/logo-mobile.svg";
 import chevronDown from "../../../public/icon-chevron-down.svg";
 import addTask from "../../../public/icon-add-task-mobile.svg";
@@ -13,7 +14,7 @@ import {
   getPageTitle,
   openAddOrEditTaskModal,
 } from "@/components/redux/features/modalSlice";
-import { useState } from "react";
+import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import BoardDropdown from "./Dropdown";
 import AddOrEditTaskModal from "./ui/Modals/AddOrEditTask";
 import DeleteBoardOrTaskModal from "./ui/Modals/DeleteBoardOrTask";
@@ -21,11 +22,33 @@ import navbarLogoDark from "../../../public/navbar-logo-dark.png";
 import navbarLogoLight from "../../../public/navbar-logo-light.png";
 import { useTheme } from "next-themes";
 
+interface Column {
+  name: string;
+  tasks?: any[]; // Update this type to match your actual data structure
+}
+
 export default function MobileNavbar() {
   const dispatch = useAppDispatch();
   const pageTitle = useAppSelector(getPageTitle);
   const openModal = () => dispatch(openNavModal());
   const [show, setShow] = useState<boolean>(false);
+  const { data } = useFetchDataFromDbQuery();
+  const [columns, setColumns] = useState<Column[]>([]);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      const [boards] = data;
+      if (boards) {
+        const activeBoardData = boards.boards.find(
+          (board: { name: string }) => board.name === pageTitle
+        );
+        if (activeBoardData) {
+          const { columns } = activeBoardData;
+          setColumns(columns);
+        }
+      }
+    }
+  }, [data, pageTitle]);
 
   return (
     <nav className="dark:bg-dark-grey flex h-16 md:hidden items-center px-4 justify-between">
@@ -49,8 +72,19 @@ export default function MobileNavbar() {
 
       <div className="flex items-center space-x-3">
         <button
-          onClick={() => dispatch(openAddOrEditTaskModal({variant: "Add New Task", isOpen: true }))}
-          className="bg-main-purple px-4 py-2 rounded-2xl"
+          onClick={() => {
+            columns.length > 0
+              ? dispatch(
+                  openAddOrEditTaskModal({
+                    variant: "Add New Task",
+                    isOpen: true,
+                  })
+                )
+              : "";
+          }}
+          className={`${
+            columns.length > 0 ? "bg-main-purple" : "bg-primary"
+          } bg-main-purple px-4 py-2 rounded-2xl`}
         >
           <Image src={addTask} alt="icon-add-task" />
         </button>
@@ -75,8 +109,26 @@ export function TabletNavbar() {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState<boolean>(false);
 
+  const { data } = useFetchDataFromDbQuery();
+  const [columns, setColumns] = useState<Column[]>([]);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      const [boards] = data;
+      if (boards) {
+        const activeBoardData = boards.boards.find(
+          (board: { name: string }) => board.name === pageTitle
+        );
+        if (activeBoardData) {
+          const { columns } = activeBoardData;
+          setColumns(columns);
+        }
+      }
+    }
+  }, [data, pageTitle]);
+
   return (
-    <nav className="dark:bg-dark-grey md:flex hidden h-24 ">
+    <nav className="bg-white dark:bg-dark-grey md:flex hidden h-24 ">
       <div className="flex-none w-[18.75rem] border-r-2 dark:border-lines-dark flex items-center pl-[2.12rem]">
         {theme === "light" ? (
           <Image src={navbarLogoLight} alt="logo" className="object-contain" />
@@ -92,15 +144,19 @@ export function TabletNavbar() {
 
         <div className="flex items-center space-x-3">
           <button
-            onClick={() =>
-              dispatch(
-                openAddOrEditTaskModal({
-                  variant: "Add New Task",
-                  isOpen: true,
-                })
-              )
-            }
-            className="bg-main-purple text-white px-4 py-2 flex rounded-3xl items-center space-x-2"
+            onClick={() => {
+              columns.length > 0
+                ? dispatch(
+                    openAddOrEditTaskModal({
+                      variant: "Add New Task",
+                      isOpen: true,
+                    })
+                  )
+                : "";
+            }}
+            className={`${
+              columns.length > 0 ? "bg-main-purple" : "bg-primary"
+            }  text-white px-4 py-2 flex rounded-3xl items-center space-x-2`}
           >
             <Image src={addTask} alt="icon-add-task" />
             <p>Add New Task</p>
