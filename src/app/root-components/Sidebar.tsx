@@ -1,11 +1,12 @@
-import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import { useAppDispatch } from "@/components/redux/hooks";
 import {
   setPageTitle,
   setActiveBoardIndex,
 } from "@/components/redux/features/modalSlice";
-import { useState, useEffect } from "react";
 import iconBoard from "../../.././public/icon-board.svg";
 import iconBoardPurple from "../../.././public/icon-board-purple.png";
 import iconBoardWhite from "../../.././public/icon-board-white.png";
@@ -14,7 +15,6 @@ import iconDarkTheme from "../../.././public/icon-dark-theme.svg";
 import iconHideSidebar from "../../.././public/icon-hide-sidebar.svg";
 import iconShowSidebar from "../../.././public/icon-show-sidebar.svg";
 import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
-import { useTheme } from "next-themes";
 
 export default function Sidebar() {
   const { data } = useFetchDataFromDbQuery();
@@ -76,7 +76,7 @@ export default function Sidebar() {
                     className={`${
                       isActive
                         ? "bg-main-purple text-white"
-                        : "text-medium-grey transition ease-in duration-150 delay-150 dark:hover:bg-white dark:hover:text-main-purple"
+                        : "text-medium-grey transition ease-in duration-150 delay-150 hover:bg-light-grey dark:hover:bg-white hover:text-main-purple"
                     } cursor-pointer rounded-tr-full rounded-br-full flex items-center space-x-2 pl-[2.12rem] py-3 pb-3`}
                   >
                     {isActive ? (
@@ -136,7 +136,7 @@ export default function Sidebar() {
 
           <div
             onClick={() => setShowSidebar(!showSidebar)}
-            className="dark:hover:bg-white py-3 pb-3 pl-6 cursor-pointer flex mt-5 transition ease-in duration-150 delay-150 rounded-tr-full rounded-br-full"
+            className="hover:bg-light-grey dark:hover:bg-white py-3 pb-3 pl-6 cursor-pointer flex mt-5 transition ease-in duration-150 delay-150 rounded-tr-full rounded-br-full"
           >
             <Image
               src={iconHideSidebar}

@@ -139,7 +139,7 @@ export default function AddOrEditTaskModal() {
   };
 
   // Handler for task status change
-  const handleTaskStatusChange = (e) => {
+  const handleTaskStatusChange = (e: React.FormEvent<HTMLSelectElement>) => {
     if (taskData) setTaskData({ ...taskData, status: e.target.value });
   };
 
@@ -333,10 +333,10 @@ export default function AddOrEditTaskModal() {
   return (
     <CRUDModal isOpen={isModalOpen} onRequestClose={closeModal}>
       <ModalBody>
-        <p>{modalVariant}</p>
+        <p className='font-bold text-lg'>{modalVariant}</p>
         {taskData && (
           <div className="py-6">
-            <div className='relative'>
+            <div className="relative">
               <InputWithLabel
                 label="Title"
                 value={taskData.title}
@@ -354,7 +354,7 @@ export default function AddOrEditTaskModal() {
             </div>
 
             <div className="pt-6">
-              <label>Description</label>
+              <label className="text-medium-grey text-sm">Description</label>
               <div className="pt-2">
                 <textarea
                   placeholder="e.g. It's always good to take a break. This fifteen minutes break will recharge the batteries a little"
@@ -371,7 +371,7 @@ export default function AddOrEditTaskModal() {
             </div>
 
             <div className="py-6">
-              <label>Subtasks</label>
+              <label className="text-medium-grey text-sm">Subtasks</label>
               {taskData.subtasks.map(
                 (subtask: { title: string }, index: number) => {
                   const { title } = subtask;
@@ -407,10 +407,10 @@ export default function AddOrEditTaskModal() {
             </div>
 
             <div className="relative">
-              <p className="mt-6 text-sm">Current Status</p>
+              <p className="mt-3 text-sm text-medium-grey">Status</p>
               <select
                 id="status"
-                className="outline-none border text-sm rounded-lg block w-full p-2.5 mt-4 placeholder:text-medium-grey border-medium-grey
+                className="outline-none border text-sm rounded-lg block w-full p-2.5 mt-2 placeholder:text-medium-grey border-medium-grey
                dark:focus:ring-main-purple dark:focus:border-main-purple dark:bg-dark-grey"
                 onChange={(e) => handleTaskStatusChange(e)}
               >

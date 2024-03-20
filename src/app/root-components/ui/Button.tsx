@@ -12,9 +12,9 @@ const buttonStyles = cva("rounded-3xl py-2 w-full text-sm font-bold", {
   variants: {
     intent: {
       primary:
-        "bg-white text-main-purple transition ease-in duration-150 delay-150",
+        "bg-light-grey text-main-purple hover:bg-light-hovered transition ease-in duration-150 delay-150",
       secondary:
-        "bg-main-purple text-white dark:hover:bg-primary transition ease-in duration-150 delay-150",
+        "bg-main-purple text-white hover:bg-primary transition ease-in duration-150 delay-150",
       danger:
         "bg-red text-white transition ease-in duration-150 delay-150 hover:bg-light-red",
     },

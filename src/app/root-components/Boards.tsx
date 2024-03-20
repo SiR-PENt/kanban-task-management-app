@@ -94,11 +94,10 @@ export default function Boards() {
             {columns.length < 7 ? (
               <div
                 onClick={() => dispatch(openAddOrEditBoardModal("Edit Board"))}
-                className="rounded-md bg-light-hovered dark:bg-dark-grey w-[17.5rem] mt-12 shrink-0 flex justify-center items-center shadow-sm"
+                className="rounded-md bg-light-hovered dark:bg-dark-grey w-[17.5rem] mt-12 shrink-0 
+                flex justify-center items-center shadow-sm text-medium-grey hover:text-main-purple cursor-pointer"
               >
-                <p className="dark:hover:text-main-purple cursor-pointer font-bold text-medium-grey text-2xl">
-                  + New Column
-                </p>
+                <p className="font-bold text-2xl">+ New Column</p>
               </div>
             ) : (
               ""
@@ -113,7 +112,7 @@ export default function Boards() {
             </p>
             <button
               onClick={() => dispatch(openAddOrEditBoardModal("Edit Board"))}
-              className="bg-main-purple transition ease-in duration-150 delay-150 dark:hover:bg-primary text-white px-4 py-2 flex mt-6 rounded-3xl items-center space-x-2"
+              className="bg-main-purple transition ease-in duration-150 delay-150 hover:bg-primary text-white px-4 py-2 flex mt-6 rounded-3xl items-center space-x-2"
             >
               <Image src={addTask} alt="icon-add-task" />
               <p>Add New Column</p>

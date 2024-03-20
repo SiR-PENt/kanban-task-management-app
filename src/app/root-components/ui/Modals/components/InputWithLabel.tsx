@@ -15,7 +15,7 @@ export default function InputWithLabel({
 }: IInputWithLabel) {
   return (
     <div>
-      <label>{label}</label>
+      <label className="text-medium-grey text-sm">{label}</label>
       <div className="pt-2">
         <input
           className={`${

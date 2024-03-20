@@ -19,7 +19,6 @@ module.exports = {
        'lines-dark': '#3E3F4E',
        'primary': '#a8a4ff',
        'light-red':'#ff9898',
-       'light-idle': '#f4f7fd',
        'light-hovered': "#e4ebfa",
       },
       backgroundImage: {

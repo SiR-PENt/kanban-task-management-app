@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import { useAppSelector, useAppDispatch } from "@/components/redux/hooks";
 import { TaskDropdown } from "../../Dropdown";
 import {
@@ -20,12 +21,6 @@ import ellipsis from "../../../../../public/icon-vertical-ellipsis.svg";
 import { CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
-const override: CSSProperties = {
-  display: "block",
-  margin: "0",
-  borderColor: "white",
-};
-
 interface ITaskDetails {
   title: string;
   subtasks: { isCompleted: boolean; title: string }[];
@@ -34,16 +29,26 @@ interface ITaskDetails {
 }
 
 export default function TaskDetailsModal() {
+
+  const { theme, } = useTheme();
+  
+  const override: CSSProperties = {
+    display: "block",
+    margin: "0",
+    borderColor: theme === 'dark' ? "white": "black",
+  };
+
+
   let { data } = useFetchDataFromDbQuery();
   const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
   const dispatch = useAppDispatch();
-
+  
   const closeModal = () => {
     dispatch(closeTaskDetailsModal());
   };
-
-  const [show, setShow] = useState<boolean>(false);
-  const [taskDetails, setTaskDetails] = useState<ITaskDetails>();
+  
+  const [ show, setShow ] = useState<boolean>(false);
+  const [ taskDetails, setTaskDetails ] = useState<ITaskDetails>();
   const [options, setOptions] = useState<[]>();
   const [subtaskIndex, setSubtaskIndex] = useState<number>();
   const isModalOpen = useAppSelector(getTaskDetailsModalValue);
@@ -195,21 +200,21 @@ export default function TaskDetailsModal() {
         {taskDetails && (
           <>
             <div className="relative flex justify-between w-full items-center pb-6">
-              <p className="text-lg">{taskDetails?.title}</p>
+              <p className="text-lg font-bold">{taskDetails?.title}</p>
               <button onClick={() => setShow(!show)}>
                 <Image src={ellipsis} alt="icon-vertical-ellipsis" />
               </button>
-              <TaskDropdown show={show} />
+              <TaskDropdown show={show} setShow={setShow} />
             </div>
             {taskDetails.description ? (
               <p className="dark:text-medium-grey text-sm leading-6">
                 {taskDetails?.description}
               </p>
             ) : (
-              <em className="dark:text-medium-grey text-sm">No description</em>
+              <em className="text-medium-grey text-sm">No description</em>
             )}
             <div className="pt-6">
-              <p className="text-sm">
+              <p className="text-sm text-medium-grey">
                 Subtasks (
                 {
                   taskDetails?.subtasks?.filter(
@@ -230,13 +235,13 @@ export default function TaskDetailsModal() {
                     return (
                       <div
                         key={index}
-                        className="mt-4 px-4 py-4 dark:text-medium-grey dark:bg-very-dark-grey w-full flex 
-                        items-center space-x-4 dark:hover:bg-main-purple dark:hover:text-white cursor-pointer transition ease-in duration-150 delay-150"
+                        className="mt-4 px-4 py-4 dark:text-medium-grey bg-light-grey dark:bg-very-dark-grey w-full flex 
+                        items-center space-x-4 hover:bg-light-hovered dark:hover:bg-main-purple dark:hover:text-white cursor-pointer transition ease-in duration-150 delay-150"
                       >
                         {isLoading ? (
                           index === subtaskIndex ? (
                             <ClipLoader
-                              color={"#ffffff"}
+                              color={(theme === 'dark') ? "#ffffff": '#000000'}
                               loading={isLoading}
                               cssOverride={override}
                               size={15}
@@ -249,7 +254,7 @@ export default function TaskDetailsModal() {
                               type="checkbox"
                               checked={isCompleted}
                               onChange={() => handleIsCompletedStatus(index)}
-                              className="w-4 h-4 text-blue-600 bg-gray-100
+                              className="w-4 h-4 text-blue-600 bg-white
                       dark:border-medium-grey rounded focus:ring-main-purple 
                        dark:focus:ring-main-purple focus:ring-2 dark:bg-dark-gre"
                             />
@@ -269,8 +274,8 @@ export default function TaskDetailsModal() {
                           htmlFor={title}
                           className={`${
                             !isCompleted
-                              ? "dark:text-white"
-                              : "dark:text-medium-grey"
+                              ? "dark:text-white text-black"
+                              : "text-medium-grey"
                           } text-sm dark:hover:text-white cursor-pointer w-full`}
                         >
                           {title}
@@ -280,7 +285,7 @@ export default function TaskDetailsModal() {
                   }
                 )}
             </div>
-            <p className="mt-6 text-sm">Current Status</p>
+            <p className="mt-6 text-sm text-medium-grey">Current Status</p>
             <select
               id="status"
               className="outline-none border text-sm rounded-lg block w-full p-2.5 mt-4 placeholder:text-medium-grey border-medium-grey

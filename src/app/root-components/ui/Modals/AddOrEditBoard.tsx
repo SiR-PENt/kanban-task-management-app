@@ -260,7 +260,7 @@ export default function AddOrEditBoardModal() {
       <ModalBody>
         {boardData && (
           <>
-            <p>{modalVariant}</p>
+            <p className="font-bold text-lg">{modalVariant}</p>
             <div className="py-6">
               <div className="relative">
                 <InputWithLabel
@@ -288,7 +288,7 @@ export default function AddOrEditBoardModal() {
               <div className="pt-6">
                 {boardData.columns.length > 0 ? (
                   <>
-                    <label htmlFor="">Board Column</label>
+                    <label className='text-medium-grey text-sm' htmlFor="">Board Column</label>
                     {boardData &&
                       boardData.columns.map(
                         (column: { name?: string }, index: number) => {
@@ -325,7 +325,7 @@ export default function AddOrEditBoardModal() {
                     onClick={handleAddNewColumn}
                     isLoading={null}
                     intent="primary"
-                    text={"Add New Column"}
+                    text={"+ Add New Column"}
                   />
                 </div>
               </div>

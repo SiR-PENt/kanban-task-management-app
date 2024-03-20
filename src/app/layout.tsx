@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={pjs.className}>
     
-      <body className='pb-24 bg-light-idle dark:bg-very-dark-grey h-screen overflow-hidden'>
+      <body className='pb-24 bg-light-grey dark:bg-very-dark-grey h-screen overflow-hidden'>
         <Providers>
         <ProvidersTheme>
           <Navbar/>

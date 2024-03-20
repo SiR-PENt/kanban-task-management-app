@@ -92,7 +92,7 @@ export default function MobileNavbar() {
           <button onClick={() => setShow(!show)}>
             <Image src={ellipsis} alt="icon-vertical-ellipsis" />
           </button>
-          <BoardDropdown show={show} />
+          <BoardDropdown setShow={setShow} show={ show } />
         </div>
       </div>
       <NavModal />
@@ -165,7 +165,7 @@ export function TabletNavbar() {
             <button onClick={() => setShow(!show)}>
               <Image src={ellipsis} alt="icon-vertical-ellipsis" />
             </button>
-            <BoardDropdown show={show} />
+            <BoardDropdown show={show} setShow={setShow} />
           </div>
         </div>
       </div>
