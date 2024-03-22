@@ -5,7 +5,6 @@ import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import { useAppDispatch } from "@/components/redux/hooks";
 import {
   setPageTitle,
-  setActiveBoardIndex,
 } from "@/components/redux/features/modalSlice";
 import iconBoard from "../../.././public/icon-board.svg";
 import iconBoardPurple from "../../.././public/icon-board-purple.png";

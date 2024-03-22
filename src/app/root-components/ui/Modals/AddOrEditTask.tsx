@@ -19,20 +19,24 @@ import {
 import InputWithLabel from "./components/InputWithLabel";
 import InputWithDeleteIcon from "./components/InputWithDeleteIcon";
 import Button from "../Button";
+import { id } from "../../../utils/data";
 
 interface ITaskData {
+  id: string;
   title: string;
   description: string;
   status: string;
-  subtasks: { title: string; isCompleted?: boolean }[];
+  subtasks: { id: string; title: string; isCompleted?: boolean }[];
 }
 
 let initialTaskData: ITaskData = {
+  id: id(),
   title: "",
   description: "",
   status: "",
   subtasks: [
     {
+      id: id(),
       title: "",
       isCompleted: false,
     },
@@ -40,7 +44,6 @@ let initialTaskData: ITaskData = {
 };
 
 export default function AddOrEditTaskModal() {
-  
   let { data } = useFetchDataFromDbQuery();
   const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
   const [taskData, setTaskData] = useState<ITaskData>();
@@ -89,10 +92,9 @@ export default function AddOrEditTaskModal() {
       setIsTaskTitleEmpty(false);
       setIsTaskStatusEmpty(false);
       setEmptySubtaskIndex(undefined);
-
     }, 3000);
     return () => clearTimeout(timeoutId);
-  }, [isTaskTitleEmpty, isTaskStatusEmpty, emptySubtaskIndex ]);
+  }, [isTaskTitleEmpty, isTaskStatusEmpty, emptySubtaskIndex]);
 
   const handleTaskTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (taskData) setTaskData({ ...taskData, title: e.target.value });
@@ -104,37 +106,39 @@ export default function AddOrEditTaskModal() {
     if (taskData) setTaskData({ ...taskData, description: e.target.value });
   };
 
-  const handleSubtaskTitleChange = (index: number) => {
+  const handleSubtaskTitleChange = (id: string) => {
     return function (e: React.ChangeEvent<HTMLInputElement>) {
       // handle change for create new board modal
       if (taskData) {
-        const updatedSubtaskTitle = taskData.subtasks.map(
-          (subtask, subtaskIndex) => {
-            if (subtaskIndex === index) {
-              return { ...subtask, title: e.target.value };
-            }
-            return subtask;
+        const updatedSubtaskTitle = taskData.subtasks.map((subtask) => {
+          const { id: subtaskId } = subtask;
+          if (subtaskId === id) {
+            return { ...subtask, title: e.target.value };
           }
-        );
+          return subtask;
+        });
         setTaskData({ ...taskData, subtasks: updatedSubtaskTitle });
       }
     };
   };
 
-  const handleDeleteSubtask = (index: number) => {
+  const handleDeleteSubtask = (id: string) => {
     if (taskData) {
-      const deletedSubtask = taskData.subtasks.filter(
-        (_subtask, subtaskIndex) => subtaskIndex !== index
-      );
+      const deletedSubtask = taskData.subtasks.filter((subtask) => {
+        const { id: subtaskId } = subtask;
+        return subtaskId !== id;
+      });
       setTaskData({ ...taskData, subtasks: deletedSubtask });
     }
   };
 
   const handleAddNewSubtask = () => {
-    const newSubtask = { title: "", isCompleted: false };
-
+    const newSubtask = { title: "", isCompleted: false, id: id() };
     if (taskData) {
-      setTaskData({ ...taskData, subtasks: [...taskData.subtasks, newSubtask] });
+      setTaskData({
+        ...taskData,
+        subtasks: [...taskData.subtasks, newSubtask],
+      });
     }
   };
 
@@ -148,7 +152,6 @@ export default function AddOrEditTaskModal() {
     e: React.FormEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-
     const { title, status, description, subtasks } = taskData!;
 
     // check if any of the subtasks has an empty field
@@ -166,9 +169,8 @@ export default function AddOrEditTaskModal() {
       setIsTaskTitleEmpty(true);
     }
 
-
     // if all conditions are met
-    if (title && !emptySubtaskStringChecker) {
+    if (title && !emptySubtaskStringChecker && status != "") {
       if (data) {
         const [boards] = data;
         const boardsCopy = [...boards.boards];
@@ -177,8 +179,8 @@ export default function AddOrEditTaskModal() {
         );
         const activeBoardIndex = boardsCopy.findIndex(
           (board: { name: string }) => board.name === currentBoardTitle
-        );
-        const { columns } = activeBoard;
+          );
+          const { columns } = activeBoard;
         // find the column in the board to update
         const getStatusColumn = columns?.find(
           (column: { name: string }) => column.name === status
@@ -188,7 +190,7 @@ export default function AddOrEditTaskModal() {
         );
         // desctructure tasks in a column. "Now" for example.
         const { tasks } = getStatusColumn;
-        const addNewTask = [...tasks, { title, status, subtasks, description }]; //add new task id: id()
+        const addNewTask = [...tasks, { title, status, subtasks, description, id: id() }]; 
         const updatedStatusColumn = { ...getStatusColumn, tasks: addNewTask };
         //update the columns in a board
         const columnsCopy = [...columns];
@@ -204,31 +206,6 @@ export default function AddOrEditTaskModal() {
       }
     }
   };
-
-  // function deepEqual(object1: any, object2: any) {
-  //   const keys1 = Object.keys(object1);
-  //   // const keys2 = Object.keys(object2);
-  //   for (const key of keys1) {
-  //     const val1 = object1[key];
-  //     const val2 = object2[key];
-  //     const areArrays = Array.isArray(val1) && Array.isArray(val2);
-  //     if (areArrays) {
-  //       if (val1.length !== val2.length) {
-  //         return false;
-  //       }
-
-  //       for (let i = 0; i < val1.length; i++) {
-  //         if (!deepEqual(val1[i], val2[i])) {
-  //           return false;
-  //         }
-  //       }
-  //     }
-  //     if (!areArrays && val1 !== val2) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
 
   const handleEditTaskToDb = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -271,7 +248,7 @@ export default function AddOrEditTaskModal() {
             tasks: columns[getStatusColumnIndex]?.tasks?.map(
               (task: any, index: number) => {
                 if (index === currentTaskIndex) {
-                  return { title, status, description, subtasks };
+                  return { id:id(), title, status, description, subtasks };
                 }
                 return task;
               }
@@ -311,7 +288,7 @@ export default function AddOrEditTaskModal() {
             ...getStatusColumn,
             tasks: [
               ...getStatusColumn?.tasks,
-              { title, status, description, subtasks },
+              { id: id(), title, status, description, subtasks },
             ],
           };
           const columnsCopy = [...columns];
@@ -333,7 +310,7 @@ export default function AddOrEditTaskModal() {
   return (
     <CRUDModal isOpen={isModalOpen} onRequestClose={closeModal}>
       <ModalBody>
-        <p className='font-bold text-lg'>{modalVariant}</p>
+        <p className="font-bold text-lg">{modalVariant}</p>
         {taskData && (
           <div className="py-6">
             <div className="relative">
@@ -373,15 +350,15 @@ export default function AddOrEditTaskModal() {
             <div className="py-6">
               <label className="text-medium-grey text-sm">Subtasks</label>
               {taskData.subtasks.map(
-                (subtask: { title: string }, index: number) => {
-                  const { title } = subtask;
+                (subtask: { title: string; id: string }, index: number) => {
+                  const { id, title } = subtask;
                   return (
-                    <div className="pt-2 relative" key={index}>
+                    <div className="pt-2 relative" key={id}>
                       <InputWithDeleteIcon
                         value={title}
                         placeholder="e.g Make Coffee"
-                        onChange={(e) => handleSubtaskTitleChange(index)(e)}
-                        onDelete={() => handleDeleteSubtask(index)}
+                        onChange={(e) => handleSubtaskTitleChange(id)(e)}
+                        onDelete={() => handleDeleteSubtask(id)}
                         isError={emptySubtaskIndex === index}
                       />
 
@@ -428,6 +405,13 @@ export default function AddOrEditTaskModal() {
                     </option>
                   );
                 })}
+                {taskData.status === "" ? (
+                  <option selected value="">
+                    Select Status
+                  </option>
+                ) : (
+                  ""
+                )}
               </select>
             </div>
             <div className="pt-6">

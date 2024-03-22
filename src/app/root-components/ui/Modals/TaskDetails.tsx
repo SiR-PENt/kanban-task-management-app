@@ -20,8 +20,11 @@ import { CRUDModal, ModalBody } from "./Modal";
 import ellipsis from "../../../../../public/icon-vertical-ellipsis.svg";
 import { CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { id } from "../../../utils/data";
+
 
 interface ITaskDetails {
+  id: string,
   title: string;
   subtasks: { isCompleted: boolean; title: string }[];
   description: string;
@@ -111,7 +114,7 @@ export default function TaskDetailsModal() {
                   return subtask;
                 }
               );
-              return { title, status, description, subtasks: updatedSubtask };
+              return { id: id(), title, status, description, subtasks: updatedSubtask };
             }
             return task;
           }
@@ -177,7 +180,7 @@ export default function TaskDetailsModal() {
           ...getStatusColumn,
           tasks: [
             ...getStatusColumn?.tasks,
-            { title, status: value, description, subtasks },
+            { id: id(), title, status: value, description, subtasks },
           ],
         };
         const columnsCopy = [...columns];

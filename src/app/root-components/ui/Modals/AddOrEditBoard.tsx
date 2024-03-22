@@ -16,20 +16,24 @@ import React, { useState, useEffect } from "react";
 import InputWithLabel from "./components/InputWithLabel";
 import Button from "../Button";
 import InputWithDeleteIcon from "./components/InputWithDeleteIcon";
+import { id } from '../../../utils/data'
 
 interface IAddBoardData {
+  id: string;
   name: string;
   columns: {
+    id: string;
     name?: string;
     columns?: { name: string; tasks?: { [key: string]: any }[] };
   }[];
 }
 
 let addBoardData = {
+  id: id(),
   name: "",
   columns: [
     {
-      // id: id(),
+      id: id(),
       name: "",
       tasks: [],
     },
@@ -97,13 +101,14 @@ export default function AddOrEditBoardModal() {
     }
   };
 
-  const handleColumnNameChange = (index: number) => {
+  const handleColumnNameChange = (id: string) => {
     return function (e: React.ChangeEvent<HTMLInputElement>) {
       // handle change for create new board modal
       if (boardData) {
         const modifyColumns = boardData.columns.map(
-          (column, columnIndex) => {
-            if (columnIndex === index) {
+          (column) => {
+            const { id: columnId } = column
+            if (columnId === id) {
               return { ...column, name: e.target.value };
             }
             return column;
@@ -121,7 +126,7 @@ export default function AddOrEditBoardModal() {
       const updatedBoardData = { ...boardData };
 
       // Create a new column object
-      const newColumn = { name: "", tasks: [] };
+      const newColumn = { id: id(), name: "", tasks: [] };
 
       // Push the new column to the columns array in the copy
       updatedBoardData.columns = [...updatedBoardData.columns, newColumn];
@@ -131,10 +136,13 @@ export default function AddOrEditBoardModal() {
     }
   };
 
-  const handleDeleteColumn = (index: number) => {
+  const handleDeleteColumn = (id: string) => {
     if (boardData) {
       const filteredColumns = boardData.columns.filter(
-        (_column, columnIndex) => columnIndex !== index
+        (column) => {
+          const { id: columnId } = column;
+          return columnId !== id
+        }
       );
       setBoardData({ ...boardData, columns: filteredColumns });
     }
@@ -251,9 +259,8 @@ export default function AddOrEditBoardModal() {
          await updateBoardToDb(boardsCopy);
          closeModal();
        }
-    }
-    
-  };
+    }   
+  }
 
   return (
     <CRUDModal isOpen={isModalOpen} onRequestClose={closeModal}>
@@ -291,15 +298,15 @@ export default function AddOrEditBoardModal() {
                     <label className='text-medium-grey text-sm' htmlFor="">Board Column</label>
                     {boardData &&
                       boardData.columns.map(
-                        (column: { name?: string }, index: number) => {
-                          let { name } = column;
+                        (column: { name?: string, id: string }, index: number) => {
+                          let { name, id } = column;
                           return (
                             <div key={index} className="pt-2 relative">
                               <InputWithDeleteIcon
                                 onChange={(e) =>
-                                  handleColumnNameChange(index!)(e)
+                                  handleColumnNameChange(id)(e)
                                 }
-                                onDelete={() => handleDeleteColumn(index)}
+                                onDelete={() => handleDeleteColumn(id)}
                                 value={name!}
                                 placeholder="e.g Done"
                                 isError={emptyColumnIndex === index}
