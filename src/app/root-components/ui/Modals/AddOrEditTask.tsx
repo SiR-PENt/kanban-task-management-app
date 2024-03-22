@@ -144,7 +144,8 @@ export default function AddOrEditTaskModal() {
 
   // Handler for task status change
   const handleTaskStatusChange = (e: React.FormEvent<HTMLSelectElement>) => {
-    if (taskData) setTaskData({ ...taskData, status: e.target.value });
+     const target = e.target as HTMLSelectElement;
+    if (taskData) setTaskData({ ...taskData, status: target.value });
   };
 
   // handler to add new task to the db

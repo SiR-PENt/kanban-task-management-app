@@ -134,7 +134,7 @@ export default function TaskDetailsModal() {
   };
 
   const handleStatusChange = (e: React.FormEvent<HTMLSelectElement>) => {
-    let value = e.target.value;
+    let value = (e.target as HTMLSelectElement).value;
     const { title, status, description, subtasks } = taskDetails!;
     if (status !== value) {
       if (data) {
@@ -239,7 +239,8 @@ export default function TaskDetailsModal() {
                       <div
                         key={index}
                         className="mt-4 px-4 py-4 dark:text-medium-grey bg-light-grey dark:bg-very-dark-grey w-full flex 
-                        items-center space-x-4 hover:bg-light-hovered dark:hover:bg-main-purple dark:hover:text-white cursor-pointer transition ease-in duration-150 delay-150"
+                        items-center space-x-4 hover:bg-light-hovered dark:hover:bg-main-purple dark:hover:text-white 
+                        cursor-pointer transition ease-in duration-150 delay-150"
                       >
                         {isLoading ? (
                           index === subtaskIndex ? (
@@ -291,7 +292,8 @@ export default function TaskDetailsModal() {
             <p className="mt-6 text-sm text-medium-grey">Current Status</p>
             <select
               id="status"
-              className="outline-none border text-sm rounded-lg block w-full p-2.5 mt-4 placeholder:text-medium-grey border-medium-grey
+              className="outline-none border text-sm rounded-lg block w-full p-2.5
+               mt-4 placeholder:text-medium-grey border-medium-grey
                dark:focus:ring-main-purple dark:focus:border-main-purple dark:bg-dark-grey"
               onChange={(e) => handleStatusChange(e)}
             >

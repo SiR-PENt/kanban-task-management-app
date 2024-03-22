@@ -46,7 +46,6 @@ export default function Boards() {
     if (data !== undefined) {
       const [boards] = data;
       if (boards) {
-        console.log(boards);
         const activeBoardData = boards.boards.find(
           (board: { name: string }) => board.name === activeBoard
         );
