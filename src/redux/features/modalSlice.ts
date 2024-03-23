@@ -40,7 +40,7 @@ export const modals = createSlice({
   initialState,
 
   reducers: {
-    openNavModal: (state: RootState) => {
+    openNavModal: (state) => {
       state.isNavModalOpen = true;
     },
 
@@ -49,7 +49,7 @@ export const modals = createSlice({
     },
 
     setActiveBoardIndex: (state, { payload }) => {
-       state.activeBoardIndex = payload;
+      state.activeBoardIndex = payload;
     },
 
     setPageTitle: (state, { payload }) => {
@@ -144,10 +144,10 @@ export const getDeleteBoardOrTaskModalVariantValue = (state: RootState) =>
 
 // add and edit task
 export const getAddOrEditTaskModalValue = (state: RootState) =>
-state.modals.isAddOrEditTaskModal.isOpen;
+  state.modals.isAddOrEditTaskModal.isOpen;
 // Selector function to retrieve variant state value 
 export const getAddOrEditTaskModalVariantValue = (state: RootState) =>
-state.modals.isAddOrEditTaskModal.variant;
+  state.modals.isAddOrEditTaskModal.variant;
 
 export const getTaskDetailsModalValue = (state: RootState) =>
   state.modals.isTaskDetailsModal.isOpen;
@@ -173,3 +173,5 @@ export const getTaskDetailsModalStatus = (state: RootState) =>
 export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 
 export default modals.reducer;
+
+
