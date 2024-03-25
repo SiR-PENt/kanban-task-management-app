@@ -53,7 +53,6 @@ export default function Boards() {
     if (data !== undefined) {
       const [boards] = data;
       if (boards) {
-        console.log(boards)
         const activeBoardData = boards.boards.find(
           (board: { name: string }) => board.name === activeBoard
         );
@@ -108,15 +107,20 @@ export default function Boards() {
     const destinationColumnIndex = newColumns.findIndex(
       (col) => col.id === destination.droppableId
     );
+    const destinationColumn = newColumns.find(
+      (col) => col.id === destination.droppableId
+    );
+   
     // Task that was dragged
     const itemMoved = newColumns[sourceColumnIndex]?.tasks[source.index];
+
     // Remove from its source
     newColumns[sourceColumnIndex].tasks.splice(source.index, 1);
     // Insert into its destination
     newColumns[destinationColumnIndex].tasks.splice(
       destination.index,
       0,
-      itemMoved
+      { ...itemMoved, status: destinationColumn!.name }
     );
     // Update the state
     setColumns(newColumns);

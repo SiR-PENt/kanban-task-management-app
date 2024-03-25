@@ -60,9 +60,9 @@ export default function DeleteBoardOrTaskModal() {
                     if (column.name === taskStatus) {
                       // delete the the task
                       const updatedTasks = column.tasks.filter(
-                        (_, index: number) => index !== taskIndex
+                        (task: { id: string }, index: number) => index !== taskIndex
                       );
-                      return { ...column, tasks: updatedTasks };
+                      return { ...column, tasks: updatedTasks }
                     }
                     return column;
                   });
