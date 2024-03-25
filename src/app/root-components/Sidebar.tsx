@@ -14,9 +14,11 @@ import iconDarkTheme from "../../.././public/icon-dark-theme.svg";
 import iconHideSidebar from "../../.././public/icon-hide-sidebar.svg";
 import iconShowSidebar from "../../.././public/icon-show-sidebar.svg";
 import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Sidebar() {
-  const { data } = useFetchDataFromDbQuery();
+  const { data, isLoading } = useFetchDataFromDbQuery();
 
   const [active, setActive] = useState<number>(0);
   const [mounted, setMounted] = useState<boolean>(false);
@@ -59,7 +61,7 @@ export default function Sidebar() {
         }
           transition-width duration-150 ease-out relative`}
       >
-        {data && (
+        {data ? (
           <>
             <p className="text-medium-grey pl-[2.12rem] text-[.95rem] font-semibold uppercase pb-3">
               {`All Boards (${data[0]?.boards.length})`}
@@ -89,6 +91,20 @@ export default function Sidebar() {
               }
             )}
           </>
+        ) : (
+          <SkeletonTheme
+            baseColor={theme === "dark" ? "#2b2c37" : "#e4ebfa"}
+            highlightColor={theme == "dark" ? "#444" : "#F4F7FD"}
+          >
+            <p>
+              <Skeleton
+                borderRadius={"0.25rem"}
+                height={40}
+                width={"100%"}
+                count={3}
+              />
+            </p>
+          </SkeletonTheme>
         )}
         <button
           onClick={() => dispatch(openAddOrEditBoardModal("Add New Board"))}
@@ -117,10 +133,11 @@ export default function Sidebar() {
                 onClick={() =>
                   theme === "light" ? setTheme("dark") : setTheme("light")
                 }
-                className="w-9 h-5 rounded-2xl px-px relative hover:bg-primary bg-main-purple flex items-center cursor-pointer"
+                className="w-9 h-5 rounded-2xl px-px relative hover:bg-primary bg-main-purple flex items-center 
+                cursor-pointer transition-width duration-150 ease-out"
               >
                 <div
-                  className={`w-4 h-4 rounded-full bg-white absolute ${
+                  className={`transition-width duration-150 ease-out w-4 h-4 rounded-full bg-white absolute mx-0.5 ${
                     theme === "light" ? "left-0" : "right-0"
                   }`}
                 />

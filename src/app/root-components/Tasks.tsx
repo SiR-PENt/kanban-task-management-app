@@ -70,7 +70,7 @@ export default function Tasks({ tasks }: ITasksProps) {
                   status
                 )
               }
-              className="x}bg-white dark:bg-dark-grey hover:text-main-purple p-6 rounded-md mt-6 cursor-pointer shadow-md"
+              className="bg-white dark:bg-dark-grey hover:text-main-purple p-6 rounded-md mt-6 cursor-pointer shadow-md"
             >
               <p className="transition ease-in duration-150 delay-150 font-bold">
                 {title}
