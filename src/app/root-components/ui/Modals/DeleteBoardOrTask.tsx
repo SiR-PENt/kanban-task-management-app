@@ -5,9 +5,9 @@ import {
   closeDeleteBoardOrTaskModal,
   getDeleteBoardOrTaskModalVariantValue,
   getPageTitle,
-  getTaskDetailsModalTitle,
+  getTaskDetailsModalId,
   getTaskDetailsModalStatus,
-  getTaskDetailsModalIndex
+  getTaskDetailsModalTitle,
 } from "@/components/redux/features/modalSlice";
 import Button from "../Button";
 import {
@@ -23,7 +23,7 @@ export default function DeleteBoardOrTaskModal() {
   const closeModal = () => dispatch(closeDeleteBoardOrTaskModal());
   const modalVariant = useAppSelector(getDeleteBoardOrTaskModalVariantValue);
   const taskTitle = useAppSelector(getTaskDetailsModalTitle); 
-  const taskIndex = useAppSelector(getTaskDetailsModalIndex);
+  const currentTaskId = useAppSelector(getTaskDetailsModalId);
   const taskStatus = useAppSelector(getTaskDetailsModalStatus);
   const pageTitle = useAppSelector(getPageTitle);
   let { data } = useFetchDataFromDbQuery();
@@ -45,7 +45,7 @@ export default function DeleteBoardOrTaskModal() {
           }
         } else {
           // Implement the logic for deleting a task
-          if (taskIndex !== undefined && taskStatus && pageTitle) {
+          if (currentTaskId !== undefined && taskStatus && pageTitle) {
             const [boards] = data;
             //  Handle the logic to update the tasks
             const updatedBoards = boards.boards.map(
@@ -60,7 +60,7 @@ export default function DeleteBoardOrTaskModal() {
                     if (column.name === taskStatus) {
                       // delete the the task
                       const updatedTasks = column.tasks.filter(
-                        (task: { id: string }, index: number) => index !== taskIndex
+                        (task: { id: string },) => task.id !== currentTaskId
                       );
                       return { ...column, tasks: updatedTasks }
                     }

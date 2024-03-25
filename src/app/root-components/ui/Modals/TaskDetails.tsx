@@ -8,8 +8,7 @@ import { TaskDropdown } from "../../Dropdown";
 import {
   getPageTitle,
   getTaskDetailsModalValue,
-  getTaskDetailsModalTitle,
-  getTaskDetailsModalIndex,
+  getTaskDetailsModalId,
   closeTaskDetailsModal,
 } from "@/components/redux/features/modalSlice";
 import {
@@ -56,9 +55,8 @@ export default function TaskDetailsModal() {
   const [subtaskIndex, setSubtaskIndex] = useState<number>();
   const isModalOpen = useAppSelector(getTaskDetailsModalValue);
   const currentBoardTitle = useAppSelector(getPageTitle);
-  const currentTaskTitle = useAppSelector(getTaskDetailsModalTitle);
-  const currentTaskIndex = useAppSelector(getTaskDetailsModalIndex);
-
+  const currentTaskId = useAppSelector(getTaskDetailsModalId);
+ 
   useEffect(() => {
     if (data) {
       const getActiveBoard = data[0].boards.find(
@@ -73,16 +71,16 @@ export default function TaskDetailsModal() {
         const activeTask = columns
           .map((column: { tasks: [] }) => column.tasks)
           .flat()
-          .find((task: { title: string }) => task.title === currentTaskTitle);
+          .find((task: { id: string }) => task.id === currentTaskId);
         setTaskDetails(activeTask);
       }
     }
     return () => setTaskDetails(undefined);
-  }, [data, currentTaskTitle, currentBoardTitle]);
+  }, [data, currentTaskId, currentBoardTitle]);
 
   const handleIsCompletedStatus = async (subtaskIndex: number) => {
     setSubtaskIndex(subtaskIndex);
-    const { title, status, description, subtasks } = taskDetails!;
+    const { title, status, description, subtasks, id } = taskDetails!;
     if (data) {
       const [boards] = data;
       const boardsCopy = [...boards.boards];
@@ -100,8 +98,8 @@ export default function TaskDetailsModal() {
       const updatedStatusColumn = {
         ...columns[getStatusColumnIndex],
         tasks: columns[getStatusColumnIndex]?.tasks?.map(
-          (task: any, index: number) => {
-            if (index === currentTaskIndex) {
+          (task: {id: string}) => {
+            if (task.id === currentTaskId) {
               const updatedSubtask = subtasks.map(
                 (
                   subtask: { isCompleted: boolean; title: string },
@@ -114,7 +112,7 @@ export default function TaskDetailsModal() {
                   return subtask;
                 }
               );
-              return { id: id(), title, status, description, subtasks: updatedSubtask };
+              return { id, title, status, description, subtasks: updatedSubtask };
             }
             return task;
           }
@@ -133,9 +131,9 @@ export default function TaskDetailsModal() {
     }
   };
 
-  const handleStatusChange = (e: React.FormEvent<HTMLSelectElement>) => {
+  const handleStatusChange = async (e: React.FormEvent<HTMLSelectElement>) => {
     let value = (e.target as HTMLSelectElement).value;
-    const { title, status, description, subtasks } = taskDetails!;
+    const { title, status, description, subtasks, id } = taskDetails!;
     if (status !== value) {
       if (data) {
         const [boards] = data;
@@ -172,7 +170,7 @@ export default function TaskDetailsModal() {
         const updatedPrevStatusColumn = {
           ...getPrevStatusColumn,
           tasks: getPrevStatusColumn?.tasks.filter(
-            (_task: [], index: number) => index !== currentTaskIndex
+            (task: {id : string }, index: number) => task.id !== currentTaskId
           ),
         };
         // update the new column of the task
@@ -180,7 +178,7 @@ export default function TaskDetailsModal() {
           ...getStatusColumn,
           tasks: [
             ...getStatusColumn?.tasks,
-            { id: id(), title, status: value, description, subtasks },
+            { id, title, status: value, description, subtasks },
           ],
         };
         const columnsCopy = [...columns];
@@ -192,7 +190,7 @@ export default function TaskDetailsModal() {
         };
         //update the board in the db
         boardsCopy[activeBoardIndex] = updatedBoard;
-        updateBoardToDb(boardsCopy);
+        await updateBoardToDb(boardsCopy);
       }
     }
   };
@@ -200,7 +198,7 @@ export default function TaskDetailsModal() {
   return (
     <CRUDModal isOpen={isModalOpen} onRequestClose={closeModal}>
       <ModalBody className="overflow-hidden">
-        {taskDetails && (
+        {taskDetails ? (
           <>
             <div className="relative flex justify-between w-full items-center pb-6">
               <p className="text-lg font-bold">{taskDetails?.title}</p>
@@ -313,7 +311,7 @@ export default function TaskDetailsModal() {
               })}
             </select>
           </>
-        )}
+        ): <p>Hi</p>}
       </ModalBody>
     </CRUDModal>
   );

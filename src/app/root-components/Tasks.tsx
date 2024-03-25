@@ -26,21 +26,15 @@ export default function Tasks({ tasks }: ITasksProps) {
   const dispatch = useAppDispatch();
 
   const handleOpenModal = (
+    id:string,
+    status: string, 
     title: string,
-    description: string,
-    subtasks: { [key: string]: any }[],
-    completedSubtasks: number,
-    index: number,
-    status: string
   ) => {
     dispatch(
       openTaskDetailsModal({
-        title,
-        description,
-        subtasks,
-        completedSubtasks,
-        index,
-        status,
+       id,
+       status,
+       title,
       })
     );
   };
@@ -61,14 +55,7 @@ export default function Tasks({ tasks }: ITasksProps) {
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               onClick={() =>
-                handleOpenModal(
-                  title,
-                  description,
-                  subtasks,
-                  completedSubtasks,
-                  index,
-                  status
-                )
+                handleOpenModal(id, status, title)
               }
               className="bg-white dark:bg-dark-grey hover:text-main-purple p-6 rounded-md mt-6 cursor-pointer shadow-md"
             >

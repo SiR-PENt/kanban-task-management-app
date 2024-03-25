@@ -21,12 +21,9 @@ const initialState: CounterState = {
 
   isTaskDetailsModal: {
     isOpen: false,
-    title: "",
-    subtasks: [],
-    completedSubtasks: "",
-    description: "",
-    index: -1,
-    status: "",
+    id:"",
+    status: '',
+    title: '',
   },
 
   isAddOrEditTaskModal: {
@@ -93,12 +90,9 @@ export const modals = createSlice({
 
     openTaskDetailsModal: (state, { payload }) => {
       state.isTaskDetailsModal.isOpen = true;
-      state.isTaskDetailsModal.title = payload.title;
-      state.isTaskDetailsModal.description = payload.description;
-      state.isTaskDetailsModal.subtasks = payload.subtasks;
-      state.isTaskDetailsModal.completedSubtasks = payload.completedSubtasks;
-      state.isTaskDetailsModal.index = payload.index;
-      state.isTaskDetailsModal.status = payload.status;
+      state.isTaskDetailsModal.id = payload.id;
+      state.isTaskDetailsModal.status = payload.status
+      state.isTaskDetailsModal.title = payload.title
     },
 
     closeTaskDetailsModal: (state) => {
@@ -152,23 +146,14 @@ export const getAddOrEditTaskModalVariantValue = (state: RootState) =>
 export const getTaskDetailsModalValue = (state: RootState) =>
   state.modals.isTaskDetailsModal.isOpen;
 
-export const getTaskDetailsModalTitle = (state: RootState) =>
-  state.modals.isTaskDetailsModal.title;
-
-export const getTaskDetailsModalDescription = (state: RootState) =>
-  state.modals.isTaskDetailsModal.description;
-
-export const getTaskDetailsModalSubtasks = (state: RootState) =>
-  state.modals.isTaskDetailsModal.subtasks;
-
-export const getTaskDetailsModalCompletedSubtasks = (state: RootState) =>
-  state.modals.isTaskDetailsModal.completedSubtasks;
-
-export const getTaskDetailsModalIndex = (state: RootState) =>
-  state.modals.isTaskDetailsModal.index;
+export const getTaskDetailsModalId = (state: RootState) =>
+  state.modals.isTaskDetailsModal.id;
 
 export const getTaskDetailsModalStatus = (state: RootState) =>
   state.modals.isTaskDetailsModal.status;
+
+export const getTaskDetailsModalTitle = (state: RootState) =>
+  state.modals.isTaskDetailsModal.title;
 
 export const getPageTitle = (state: RootState) => state.modals.pageTitle;
 

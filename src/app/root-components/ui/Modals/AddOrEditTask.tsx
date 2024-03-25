@@ -8,9 +8,8 @@ import {
   getAddOrEditTaskModalVariantValue,
   closeAddOrEditTaskModal,
   getPageTitle,
-  getTaskDetailsModalTitle,
+  getTaskDetailsModalId,
   getTaskDetailsModalStatus,
-  getTaskDetailsModalIndex,
 } from "@/components/redux/features/modalSlice";
 import {
   useFetchDataFromDbQuery,
@@ -57,9 +56,8 @@ export default function AddOrEditTaskModal() {
   const isVariantAdd = modalVariant === "Add New Task";
   const closeModal = () => dispatch(closeAddOrEditTaskModal());
   const currentBoardTitle = useAppSelector(getPageTitle);
-  const currentTaskTitle = useAppSelector(getTaskDetailsModalTitle);
-  const currentTaskStatus = useAppSelector(getTaskDetailsModalStatus);
-  const currentTaskIndex = useAppSelector(getTaskDetailsModalIndex);
+  const currentTaskId = useAppSelector(getTaskDetailsModalId);
+  const currentTaskStatus = useAppSelector(getTaskDetailsModalStatus)
 
   useEffect(() => {
     if (data) {
@@ -79,7 +77,7 @@ export default function AddOrEditTaskModal() {
           const activeTask = columns
             .map((column: { tasks: [] }) => column.tasks)
             .flat()
-            .find((task: { title: string }) => task.title === currentTaskTitle);
+            .find((task: { id: string }) => task.id === currentTaskId);
           setTaskData(activeTask);
         }
       }
@@ -247,8 +245,8 @@ export default function AddOrEditTaskModal() {
           const updatedStatusColumn = {
             ...columns[getStatusColumnIndex],
             tasks: columns[getStatusColumnIndex]?.tasks?.map(
-              (task: any, index: number) => {
-                if (index === currentTaskIndex) {
+              (task: {id: string}, index: number) => {
+                if (id === currentTaskId) {
                   return { id:id(), title, status, description, subtasks };
                 }
                 return task;
@@ -281,7 +279,7 @@ export default function AddOrEditTaskModal() {
           const updatedPrevStatusColumn = {
             ...getPrevStatusColumn,
             tasks: getPrevStatusColumn?.tasks.filter(
-              (_task: [], index: number) => index !== currentTaskIndex
+              (task: {id: string }) => id !== currentTaskId
             ),
           };
           // update the new column of the task
