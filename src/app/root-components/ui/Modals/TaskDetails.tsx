@@ -59,7 +59,7 @@ export default function TaskDetailsModal() {
  
   useEffect(() => {
     if (data) {
-      const getActiveBoard = data[0].boards.find(
+      const getActiveBoard = data[0]?.boards.find(
         (board: { name: string }) => board.name === currentBoardTitle
       );
       if (getActiveBoard) {

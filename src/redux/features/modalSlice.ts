@@ -6,6 +6,9 @@ type CounterState = {
 };
 
 const initialState: CounterState = {
+
+  isAdded: false,
+
   isNavModalOpen: false,
 
   pageTitle: "",
@@ -37,6 +40,11 @@ export const modals = createSlice({
   initialState,
 
   reducers: {
+
+    setIsAddedToTrue: (state) => {
+      state.isAdded = true;
+    },
+
     openNavModal: (state) => {
       state.isNavModalOpen = true;
     },
@@ -102,6 +110,7 @@ export const modals = createSlice({
 });
 
 export const {
+  setIsAddedToTrue,
   openNavModal,
   closeNavModal,
   setPageTitle,
@@ -115,6 +124,10 @@ export const {
   closeTaskDetailsModal,
   setActiveBoardIndex,
 } = modals.actions;
+
+
+export const getIsAddedValue = (state: RootState) =>
+  state.modals.isAdded;
 
 export const getNavModalValue = (state: RootState) =>
   state.modals.isNavModalOpen;

@@ -3,9 +3,7 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import { useAppDispatch } from "@/components/redux/hooks";
-import {
-  setPageTitle,
-} from "@/components/redux/features/modalSlice";
+import { setPageTitle } from "@/components/redux/features/modalSlice";
 import iconBoard from "../../.././public/icon-board.svg";
 import iconBoardPurple from "../../.././public/icon-board-purple.png";
 import iconBoardWhite from "../../.././public/icon-board-white.png";
@@ -14,12 +12,12 @@ import iconDarkTheme from "../../.././public/icon-dark-theme.svg";
 import iconHideSidebar from "../../.././public/icon-hide-sidebar.svg";
 import iconShowSidebar from "../../.././public/icon-show-sidebar.svg";
 import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
+import { signOut } from "next-auth/react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Sidebar() {
   const { data, isLoading } = useFetchDataFromDbQuery();
-
   const [active, setActive] = useState<number>(0);
   const [mounted, setMounted] = useState<boolean>(false);
   const [showSidebar, setShowSidebar] = useState<boolean>(true);
@@ -96,12 +94,12 @@ export default function Sidebar() {
             baseColor={theme === "dark" ? "#2b2c37" : "#e4ebfa"}
             highlightColor={theme == "dark" ? "#444" : "#F4F7FD"}
           >
-            <p>
+            <p className="pl-6">
               <Skeleton
                 borderRadius={"0.25rem"}
                 height={40}
                 width={"100%"}
-                count={3}
+                count={4}
               />
             </p>
           </SkeletonTheme>
@@ -162,6 +160,15 @@ export default function Sidebar() {
             <p className="text-medium-grey ml-2 text-sm hover:text-main-purple">
               Hide Sidebar
             </p>
+          </div>
+          <div className='pl-6'>
+          <button
+            onClick={() => signOut()}
+            className="bg-main-purple transition ease-in duration-150 delay-150 dark:hover:bg-primary text-white
+                   px-4 py-2 mt-6 rounded-3xl space-x-2 w-full"
+          >
+            <p className='text-center w-full'>Sign Out</p>
+          </button>     
           </div>
         </footer>
       </aside>

@@ -8,6 +8,7 @@ import {
 import { useAppSelector, useAppDispatch } from "@/components/redux/hooks";
 import {
   getPageTitle,
+  getIsAddedValue,
   openAddOrEditBoardModal,
 } from "@/components/redux/features/modalSlice";
 import Image from "next/image";
@@ -44,25 +45,29 @@ export default function Boards() {
   const [columns, setColumns] = useState<Column[]>([]);
   const { theme } = useTheme();
   const activeBoard = useAppSelector(getPageTitle);
+  const isAdded = useAppSelector(getIsAddedValue);
   const { data, isLoading } = useFetchDataFromDbQuery();
   const [updateBoardToDb] = useUpdateBoardToDbMutation();
   const initialRender = useRef(true);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (data !== undefined) {
-      const [boards] = data;
-      if (boards) {
-        const activeBoardData = boards.boards.find(
-          (board: { name: string }) => board.name === activeBoard
-        );
-        if (activeBoardData) {
-          const { columns } = activeBoardData;
-          setColumns(columns);
+  useEffect(() => { 
+      console.log(isAdded)
+      if (data && data?.length > 0) {
+        const [boards] = data;
+        if (boards) {
+          const activeBoardData = boards.boards.find(
+            (board: { name: string }) => board.name === activeBoard
+          );
+          if (activeBoardData) {
+            const { columns } = activeBoardData;
+            setColumns(columns);
+            console.log(columns)
+          }
         }
       }
-    }
-  }, [data, activeBoard]);
+    
+  }, [ data, activeBoard]);
 
   useEffect(() => {
     // Check if it's the initial render, to avoid sending the data to the backend on mount
@@ -195,7 +200,7 @@ export default function Boards() {
           ) : (
             <div className="w-full h-full flex justify-center items-center">
               <div className="flex flex-col items-center">
-                <p className="dark:text-medium-grey text-sm">
+                <p className="dark:text-medium-grey text-sm text-center">
                   This board is empty. Create a new column to get started.
                 </p>
                 <button

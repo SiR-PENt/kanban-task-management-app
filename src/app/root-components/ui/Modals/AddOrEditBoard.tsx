@@ -76,7 +76,7 @@ export default function AddOrEditBoardModal() {
       if (isVariantAdd) {
         setBoardData(addBoardData);
       } else {
-        const activeBoard = data[0].boards.find(
+        const activeBoard = data[0]?.boards.find(
           (board: { name: string }) => board.name === currentBoardTitle
         );
         setBoardData(activeBoard);
