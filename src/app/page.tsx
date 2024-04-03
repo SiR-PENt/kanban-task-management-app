@@ -6,6 +6,9 @@ import { useEffect } from "react";
 import { getSession } from "next-auth/react";
 import { data } from "./utils/data.js";
 import {
+  useFetchDataFromDbQuery,
+} from "@/components/redux/services/apiSlice";
+import {
   setIsAddedToTrue,
   getIsAddedValue,
 } from "../redux/features/modalSlice";
@@ -14,8 +17,9 @@ import Boards from "./root-components/Boards";
 import Sidebar from "./root-components/Sidebar";
 
 export default function Dashboard() {
-  const [getUser, setGetUser] = useState<{ [key: string]: any }>();
 
+  const [getUser, setGetUser] = useState<{ [key: string]: any }>();
+  const { data: dbData, isLoading } = useFetchDataFromDbQuery();
   const initialRender = useRef(true);
   const dispatch = useAppDispatch();
   const isAdded = useAppSelector(getIsAddedValue);
@@ -50,8 +54,10 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (!initialRender.current)
+    if (!initialRender.current) {
       handleAddDoc(); // step 4 => when the user data changes, call this function
+      console.log(data)
+    }
     else {
       initialRender.current = false;
       console.log(initialRender.current);

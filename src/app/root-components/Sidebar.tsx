@@ -7,19 +7,15 @@ import { setPageTitle } from "@/components/redux/features/modalSlice";
 import iconBoard from "../../.././public/icon-board.svg";
 import iconBoardPurple from "../../.././public/icon-board-purple.png";
 import iconBoardWhite from "../../.././public/icon-board-white.png";
-import iconLightTheme from "../../.././public/icon-light-theme.svg";
-import iconDarkTheme from "../../.././public/icon-dark-theme.svg";
-import iconHideSidebar from "../../.././public/icon-hide-sidebar.svg";
 import iconShowSidebar from "../../.././public/icon-show-sidebar.svg";
 import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
-import { signOut } from "next-auth/react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import SidebarFooter from "./Sidebar/Footer";
 
 export default function Sidebar() {
   const { data, isLoading } = useFetchDataFromDbQuery();
   const [active, setActive] = useState<number>(0);
-  const [mounted, setMounted] = useState<boolean>(false);
   const [showSidebar, setShowSidebar] = useState<boolean>(true);
 
   const dispatch = useAppDispatch();
@@ -38,16 +34,8 @@ export default function Sidebar() {
     }
   }, [data]);
 
-  const { theme, setTheme } = useTheme();
+  const { theme, } = useTheme();
 
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <div className="relative hidden md:block">
@@ -114,63 +102,7 @@ export default function Sidebar() {
             + Create New Board
           </p>
         </button>
-
-        <footer
-          className={`${
-            !showSidebar ? "hidden" : "block"
-          } absolute bottom-0 py-6 pr-6 w-full`}
-        >
-          <div className="pl-6">
-            <div className="h-[3rem] rounded-md flex justify-center items-center space-x-6 bg-light-grey dark:bg-very-dark-grey w-full">
-              <Image
-                src={iconLightTheme}
-                alt="board icon"
-                className="object-contain"
-              />
-              <div
-                onClick={() =>
-                  theme === "light" ? setTheme("dark") : setTheme("light")
-                }
-                className="w-9 h-5 rounded-2xl px-px relative hover:bg-primary bg-main-purple flex items-center 
-                cursor-pointer transition-width duration-150 ease-out"
-              >
-                <div
-                  className={`transition-width duration-150 ease-out w-4 h-4 rounded-full bg-white absolute mx-0.5 ${
-                    theme === "light" ? "left-0" : "right-0"
-                  }`}
-                />
-              </div>
-              <Image
-                src={iconDarkTheme}
-                alt="board icon"
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          <div
-            onClick={() => setShowSidebar(!showSidebar)}
-            className="hover:bg-light-grey dark:hover:bg-white py-3 pb-3 pl-6 cursor-pointer flex mt-5 transition ease-in duration-150 delay-150 rounded-tr-full rounded-br-full"
-          >
-            <Image
-              src={iconHideSidebar}
-              alt="hide sidebar"
-              className="object-contain"
-            />
-            <p className="text-medium-grey ml-2 text-sm hover:text-main-purple">
-              Hide Sidebar
-            </p>
-          </div>
-          <div className='pl-6'>
-          <button
-            onClick={() => signOut()}
-            className="bg-main-purple transition ease-in duration-150 delay-150 dark:hover:bg-primary text-white
-                   px-4 py-2 mt-6 rounded-3xl space-x-2 w-full"
-          >
-            <p className='text-center w-full'>Sign Out</p>
-          </button>     
-          </div>
-        </footer>
+        <SidebarFooter showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
       </aside>
       <div
         onClick={() => setShowSidebar(!showSidebar)}
