@@ -1,41 +1,43 @@
+"use client"
+
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
-import { useAppDispatch } from "@/components/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/components/redux/hooks";
 import { setPageTitle } from "@/components/redux/features/modalSlice";
 import iconBoard from "../../.././public/icon-board.svg";
 import iconBoardPurple from "../../.././public/icon-board-purple.png";
 import iconBoardWhite from "../../.././public/icon-board-white.png";
 import iconShowSidebar from "../../.././public/icon-show-sidebar.svg";
-import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
+import { openAddOrEditBoardModal, setActiveBoardIndex, getActiveBoardIndex } from "@/components/redux/features/modalSlice";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import SidebarFooter from "./Sidebar/Footer";
 
 export default function Sidebar() {
-  const { data, isLoading } = useFetchDataFromDbQuery();
-  const [active, setActive] = useState<number>(0);
+  const { data, } = useFetchDataFromDbQuery();
   const [showSidebar, setShowSidebar] = useState<boolean>(true);
 
   const dispatch = useAppDispatch();
 
   const handleNav = (index: number, name: string) => {
-    setActive(index);
+    dispatch(setActiveBoardIndex(index));
     dispatch(setPageTitle(name));
   };
+
+  const currentBoardIndex = useAppSelector(getActiveBoardIndex); 
 
   useEffect(() => {
     if (data) {
       const activeBoard = data[0]?.boards.find(
-        (_item: any, index: number) => index === active
+        (_item: any, index: number) => index === currentBoardIndex
       );
       dispatch(setPageTitle(activeBoard?.name));
     }
   }, [data]);
 
   const { theme, } = useTheme();
-
 
   return (
     <div className="relative hidden md:block">
@@ -55,7 +57,7 @@ export default function Sidebar() {
             {data[0]?.boards.map(
               (board: { [key: string]: any }, index: number) => {
                 const { name } = board;
-                const isActive = index === active;
+                const isActive = index === currentBoardIndex;
                 return (
                   <div
                     onClick={() => handleNav(index, name)}
@@ -108,7 +110,8 @@ export default function Sidebar() {
         onClick={() => setShowSidebar(!showSidebar)}
         className={`${
           !showSidebar ? "block" : "hidden"
-        } cursor-pointer h-12 w-14 bg-main-purple dark:hover:bg-primary transition ease-in duration-150 delay-150 absolute left-full rounded-tr-full rounded-br-full 
+        } cursor-pointer h-12 w-14 bg-main-purple dark:hover:bg-primary transition ease-in 
+        duration-150 delay-150 absolute left-full rounded-tr-full rounded-br-full 
             bottom-4 flex items-center justify-center`}
       >
         <Image

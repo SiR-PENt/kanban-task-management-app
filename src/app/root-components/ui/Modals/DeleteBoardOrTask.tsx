@@ -60,9 +60,9 @@ export default function DeleteBoardOrTaskModal() {
                     if (column.name === taskStatus) {
                       // delete the the task
                       const updatedTasks = column.tasks.filter(
-                        (task: { id: string },) => task.id !== currentTaskId
+                        (task: { id: string }) => task.id !== currentTaskId
                       );
-                      return { ...column, tasks: updatedTasks }
+                      return { ...column, tasks: updatedTasks };
                     }
                     return column;
                   });
@@ -72,7 +72,9 @@ export default function DeleteBoardOrTaskModal() {
               }
             );
             await updateBoardToDb(updatedBoards);
-            closeModal()
+            // find the index of the board recently deleted and add reduce it by 1
+
+            closeModal();
           }
         }
       }   

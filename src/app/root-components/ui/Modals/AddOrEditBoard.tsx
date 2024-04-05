@@ -7,6 +7,7 @@ import {
   closeAddOrEditBoardModal,
   getPageTitle,
   getAddOrEditBoardModalVariantValue,
+  setActiveBoardIndex,
 } from "@/components/redux/features/modalSlice";
 import {
   useFetchDataFromDbQuery,
@@ -186,6 +187,7 @@ export default function AddOrEditBoardModal() {
         const addBoard = [...boards.boards, boardData];
         boards = addBoard;
         await updateBoardToDb(boards);
+        // find the index of the board recently added and it to the store
         closeModal();
       }
     }
@@ -221,7 +223,6 @@ export default function AddOrEditBoardModal() {
 
   const handleEditBoard = async () => {
 
-    
     //condition to run if the board name is empty
     if (boardData?.name === "") {
       setIsBoardNameEmpty(true);

@@ -1,11 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Modal from "../Modal";
 import { useAppDispatch, useAppSelector } from "@/components/redux/hooks";
 import {
   getNavModalValue,
   closeNavModal,
   setPageTitle,
+  getActiveBoardIndex,
+  setActiveBoardIndex,
 } from "@/components/redux/features/modalSlice";
 import iconBoard from "../../../../../../public/icon-board.svg";
 import iconBoardPurple from "../../../../../../public/icon-board-purple.png";
@@ -13,25 +16,25 @@ import iconBoardWhite from "../../../../../../public/icon-board-white.png";
 import Image from "next/image";
 import NavModalFooter from "./Footer";
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
-import { useState, useEffect } from "react";
 import { openAddOrEditBoardModal } from "@/components/redux/features/modalSlice";
 
 export default function NavModal() {
-  const [active, setActive] = useState<number>(0);
   const dispatch = useAppDispatch();
   const isNavModalOpen = useAppSelector(getNavModalValue);
   const closeModal = () => dispatch(closeNavModal());
   const { data } = useFetchDataFromDbQuery();
 
   const handleNav = (index: number, name: string) => {
-    setActive(index);
+    dispatch(setActiveBoardIndex(index));
     dispatch(setPageTitle(name));
   };
+
+  const currentBoardIndex = useAppSelector(getActiveBoardIndex)
 
   useEffect(() => {
     if (data) {
       const activeBoard = data[0]?.boards.find(
-        (_item: any, index: number) => index === active
+        (_item: any, index: number) => index === currentBoardIndex
       );
       dispatch(setPageTitle(activeBoard?.name));
     }
@@ -47,7 +50,7 @@ export default function NavModal() {
           {data[0]?.boards.map(
             (board: { [key: string]: any }, index: number) => {
               const { name } = board;
-              const isActive = index === active;
+              const isActive = index === currentBoardIndex;
               return (
                 <div
                   onClick={() => handleNav(index, name)}

@@ -8,7 +8,6 @@ import {
 import { useAppSelector, useAppDispatch } from "@/components/redux/hooks";
 import {
   getPageTitle,
-  getIsAddedValue,
   openAddOrEditBoardModal,
 } from "@/components/redux/features/modalSlice";
 import Image from "next/image";
@@ -35,6 +34,7 @@ interface ITask {
   description: string;
   status: string;
 }
+
 interface Column {
   id: string;
   name: string;
@@ -45,14 +45,12 @@ export default function Boards() {
   const [columns, setColumns] = useState<Column[]>([]);
   const { theme } = useTheme();
   const activeBoard = useAppSelector(getPageTitle);
-  const isAdded = useAppSelector(getIsAddedValue);
   const { data, isLoading } = useFetchDataFromDbQuery();
   const [updateBoardToDb] = useUpdateBoardToDbMutation();
   const initialRender = useRef(true);
   const dispatch = useAppDispatch();
 
   useEffect(() => { 
-      console.log(isAdded)
       if (data && data?.length > 0) {
         const [boards] = data;
         if (boards) {
@@ -61,8 +59,7 @@ export default function Boards() {
           );
           if (activeBoardData) {
             const { columns } = activeBoardData;
-            setColumns(columns);
-            console.log(columns)
+            setColumns(columns);       
           }
         }
       }
@@ -139,14 +136,14 @@ export default function Boards() {
           highlightColor={theme == "dark" ? "#444" : "#F4F7FD"}
         >
           <div className="flex space-x-6">
-            {[1, 2, 3].map((number) => {
+            {[1, 2, 3, 4].map((number) => {
               return (
                 <div key={number}>
                   <Skeleton
                     borderRadius={"0.25rem"}
                     height={80}
                     width={"17.5rem"}
-                    count={3}
+                    count={4}
                   />
                 </div>
               );
