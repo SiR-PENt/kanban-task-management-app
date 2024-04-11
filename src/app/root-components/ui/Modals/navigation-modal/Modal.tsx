@@ -31,15 +31,6 @@ export default function NavModal() {
 
   const currentBoardIndex = useAppSelector(getActiveBoardIndex)
 
-  useEffect(() => {
-    if (data) {
-      const activeBoard = data[0]?.boards.find(
-        (_item: any, index: number) => index === currentBoardIndex
-      );
-      dispatch(setPageTitle(activeBoard?.name));
-    }
-  }, [ data, currentBoardIndex ]);
-
   return (
     <Modal isOpen={isNavModalOpen} onRequestClose={closeModal}>
       {data && (

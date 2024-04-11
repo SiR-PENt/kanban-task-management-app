@@ -90,7 +90,7 @@ export default function AddOrEditBoardModal() {
         setBoardData(activeBoard);
       }
     }
-  }, [storeData, modalVariant]);
+  }, [storeData, modalVariant, currentBoardIndex]);
 
   // Effect to clear error messages after a 3 secs
   useEffect(() => {

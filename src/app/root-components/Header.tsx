@@ -31,7 +31,7 @@ interface Column {
 export default function MobileNavbar() {
   const dispatch = useAppDispatch();
   const pageTitle = useAppSelector(getPageTitle);
-  const currentBoardIndex = useAppSelector(getActiveBoardIndex);
+  // const currentBoardIndex = useAppSelector(getActiveBoardIndex);
   const openModal = () => dispatch(openNavModal());
   const [show, setShow] = useState<boolean>(false);
   const { data } = useFetchDataFromDbQuery();

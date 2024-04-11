@@ -44,8 +44,8 @@ export default function DeleteBoardOrTaskModal() {
               (board: { name: string }) => board.name !== pageTitle
             );
             await updateBoardToDb(updatedBoards);
-            dispatch(setActiveBoardIndex(currentBoardIndex - 1));
             closeModal();
+            dispatch(setActiveBoardIndex(currentBoardIndex - 1));
           }
         } else {
           // Implement the logic for deleting a task
@@ -76,15 +76,12 @@ export default function DeleteBoardOrTaskModal() {
               }
             );
             await updateBoardToDb(updatedBoards);
-            // find the index of the board recently deleted and reduce it by 1
-        
             closeModal();
           }
         }
       }   
     };
-
-    
+   
   return (
     <CRUDModal isOpen={isModalOpen} onRequestClose={closeModal}>
       <ModalBody>

@@ -8,6 +8,7 @@ import {
 import { useAppSelector, useAppDispatch } from "@/components/redux/hooks";
 import {
   getActiveBoardIndex,
+  setPageTitle,
   getPageTitle,
   openAddOrEditBoardModal,
 } from "@/components/redux/features/modalSlice";
@@ -21,7 +22,7 @@ import { useTheme } from "next-themes";
 import { StrictModeDroppable as Droppable } from "./StrictModeDroppable";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import DeleteBoardOrTaskModal from "./ui/Modals/DeleteBoardOrTask";
+
 
 export interface ISubtask {
   id: string;
@@ -58,15 +59,16 @@ export default function Boards() {
       const [boards] = data!;
       if (boards) {
         const activeBoardData = boards.boards.find(
-          (board: { name: string }) => board.name === pageTitle
+          (_board: { name: string }, index: number) => index === currentBoardIndex
         );
         if (activeBoardData) {
+          dispatch(setPageTitle(activeBoardData.name));
           const { columns } = activeBoardData;
           setColumns(columns);
         }
       }
     }
-  }, [data, pageTitle, currentBoardIndex ]);
+  }, [data, pageTitle ]);
 
   useEffect(() => {
     // Check if it's the initial render, to avoid sending the data to the backend on mount
