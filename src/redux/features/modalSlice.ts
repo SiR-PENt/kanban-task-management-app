@@ -31,6 +31,7 @@ const initialState: CounterState = {
     isOpen: false,
     variant: "",
   },
+
 };
 
 export const modals = createSlice({

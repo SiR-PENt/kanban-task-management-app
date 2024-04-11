@@ -1,7 +1,13 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getSession } from "next-auth/react";
 // additionally import the doc and updateDoc method from firestore
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  updateDoc,
+  addDoc,
+} from "firebase/firestore";
 import { db } from "@/components/app/utils/firebase";
 
 export const fireStoreApi = createApi({
@@ -35,12 +41,14 @@ export const fireStoreApi = createApi({
             const { user } = session;
             const ref = collection(db, `users/${user.email}/tasks`);
             const querySnapshot = await getDocs(ref);
-            const boardId = querySnapshot.docs.map((doc) => {
-              return doc.id;
-            });
-            await updateDoc(doc(db, `users/${user.email}/tasks/${boardId}`), {
-              boards: arg,
-            });
+            // if no document had been create fr the user, create a new one.
+  
+              const boardId = querySnapshot.docs.map((doc) => {
+                return doc.id;
+              });
+              await updateDoc(doc(db, `users/${user.email}/tasks/${boardId}`), {
+                boards: arg,
+              });
           }
           return Promise.resolve({ data: null });
         } catch (e) {

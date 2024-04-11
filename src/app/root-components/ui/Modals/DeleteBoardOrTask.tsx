@@ -8,6 +8,8 @@ import {
   getTaskDetailsModalId,
   getTaskDetailsModalStatus,
   getTaskDetailsModalTitle,
+  getActiveBoardIndex,
+  setActiveBoardIndex,
 } from "@/components/redux/features/modalSlice";
 import Button from "../Button";
 import {
@@ -26,9 +28,10 @@ export default function DeleteBoardOrTaskModal() {
   const currentTaskId = useAppSelector(getTaskDetailsModalId);
   const taskStatus = useAppSelector(getTaskDetailsModalStatus);
   const pageTitle = useAppSelector(getPageTitle);
+  const currentBoardIndex = useAppSelector(getActiveBoardIndex);
   let { data } = useFetchDataFromDbQuery();
   const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
-
+  
     const handleDelete = async (e: React.FormEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (data) {
@@ -41,6 +44,7 @@ export default function DeleteBoardOrTaskModal() {
               (board: { name: string }) => board.name !== pageTitle
             );
             await updateBoardToDb(updatedBoards);
+            dispatch(setActiveBoardIndex(currentBoardIndex - 1));
             closeModal();
           }
         } else {
@@ -72,8 +76,8 @@ export default function DeleteBoardOrTaskModal() {
               }
             );
             await updateBoardToDb(updatedBoards);
-            // find the index of the board recently deleted and add reduce it by 1
-
+            // find the index of the board recently deleted and reduce it by 1
+        
             closeModal();
           }
         }

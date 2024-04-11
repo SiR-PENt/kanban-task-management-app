@@ -10,13 +10,13 @@ import iconBoard from "../../.././public/icon-board.svg";
 import iconBoardPurple from "../../.././public/icon-board-purple.png";
 import iconBoardWhite from "../../.././public/icon-board-white.png";
 import iconShowSidebar from "../../.././public/icon-show-sidebar.svg";
-import { openAddOrEditBoardModal, setActiveBoardIndex, getActiveBoardIndex } from "@/components/redux/features/modalSlice";
+import { openAddOrEditBoardModal, setActiveBoardIndex, getActiveBoardIndex, getPageTitle } from "@/components/redux/features/modalSlice";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import SidebarFooter from "./Sidebar/Footer";
 
 export default function Sidebar() {
-  const { data, } = useFetchDataFromDbQuery();
+  let { data, } = useFetchDataFromDbQuery();
   const [showSidebar, setShowSidebar] = useState<boolean>(true);
 
   const dispatch = useAppDispatch();
@@ -27,15 +27,6 @@ export default function Sidebar() {
   };
 
   const currentBoardIndex = useAppSelector(getActiveBoardIndex); 
-
-  useEffect(() => {
-    if (data) {
-      const activeBoard = data[0]?.boards.find(
-        (_item: any, index: number) => index === currentBoardIndex
-      );
-      dispatch(setPageTitle(activeBoard?.name));
-    }
-  }, [data]);
 
   const { theme, } = useTheme();
 
@@ -52,7 +43,7 @@ export default function Sidebar() {
         {data ? (
           <>
             <p className="text-medium-grey pl-[2.12rem] text-[.95rem] font-semibold uppercase pb-3">
-              {`All Boards (${data[0]?.boards.length})`}
+              {`All Boards (${data[0]?.boards.length > 0 ? data[0]?.boards.length : 0 })`}
             </p>
             {data[0]?.boards.map(
               (board: { [key: string]: any }, index: number) => {

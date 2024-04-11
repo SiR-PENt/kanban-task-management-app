@@ -19,11 +19,9 @@ import { CRUDModal, ModalBody } from "./Modal";
 import ellipsis from "../../../../../public/icon-vertical-ellipsis.svg";
 import { CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { id } from "../../../utils/data";
-
 
 interface ITaskDetails {
-  id: string,
+  id: string;
   title: string;
   subtasks: { isCompleted: boolean; title: string }[];
   description: string;
@@ -31,35 +29,34 @@ interface ITaskDetails {
 }
 
 export default function TaskDetailsModal() {
+  const { theme } = useTheme();
 
-  const { theme, } = useTheme();
-  
   const override: CSSProperties = {
     display: "block",
     margin: "0",
-    borderColor: theme === 'dark' ? "white": "black",
+    borderColor: theme === "dark" ? "white" : "black",
   };
-
 
   let { data } = useFetchDataFromDbQuery();
   const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
   const dispatch = useAppDispatch();
-  
+
   const closeModal = () => {
     dispatch(closeTaskDetailsModal());
   };
-  
-  const [ show, setShow ] = useState<boolean>(false);
-  const [ taskDetails, setTaskDetails ] = useState<ITaskDetails>();
+
+  const [show, setShow] = useState<boolean>(false);
+  const [taskDetails, setTaskDetails] = useState<ITaskDetails>();
   const [options, setOptions] = useState<[]>();
   const [subtaskIndex, setSubtaskIndex] = useState<number>();
   const isModalOpen = useAppSelector(getTaskDetailsModalValue);
   const currentBoardTitle = useAppSelector(getPageTitle);
   const currentTaskId = useAppSelector(getTaskDetailsModalId);
- 
+
+  
   useEffect(() => {
     if (data) {
-      const getActiveBoard = data[0]?.boards.find(
+      const getActiveBoard = data![0]?.boards.find(
         (board: { name: string }) => board.name === currentBoardTitle
       );
       if (getActiveBoard) {
@@ -98,7 +95,7 @@ export default function TaskDetailsModal() {
       const updatedStatusColumn = {
         ...columns[getStatusColumnIndex],
         tasks: columns[getStatusColumnIndex]?.tasks?.map(
-          (task: {id: string}) => {
+          (task: { id: string }) => {
             if (task.id === currentTaskId) {
               const updatedSubtask = subtasks.map(
                 (
@@ -112,7 +109,13 @@ export default function TaskDetailsModal() {
                   return subtask;
                 }
               );
-              return { id, title, status, description, subtasks: updatedSubtask };
+              return {
+                id,
+                title,
+                status,
+                description,
+                subtasks: updatedSubtask,
+              };
             }
             return task;
           }
@@ -170,7 +173,7 @@ export default function TaskDetailsModal() {
         const updatedPrevStatusColumn = {
           ...getPrevStatusColumn,
           tasks: getPrevStatusColumn?.tasks.filter(
-            (task: {id : string }, index: number) => task.id !== currentTaskId
+            (task: { id: string }, index: number) => task.id !== currentTaskId
           ),
         };
         // update the new column of the task
@@ -243,7 +246,7 @@ export default function TaskDetailsModal() {
                         {isLoading ? (
                           index === subtaskIndex ? (
                             <ClipLoader
-                              color={(theme === 'dark') ? "#ffffff": '#000000'}
+                              color={theme === "dark" ? "#ffffff" : "#000000"}
                               loading={isLoading}
                               cssOverride={override}
                               size={15}
@@ -311,7 +314,9 @@ export default function TaskDetailsModal() {
               })}
             </select>
           </>
-        ): <p>Hi</p>}
+        ) : (
+          <p className="text-center">Fetching...</p>
+        )}
       </ModalBody>
     </CRUDModal>
   );

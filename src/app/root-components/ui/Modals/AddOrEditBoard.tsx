@@ -8,6 +8,7 @@ import {
   getPageTitle,
   getAddOrEditBoardModalVariantValue,
   setActiveBoardIndex,
+  getActiveBoardIndex,
 } from "@/components/redux/features/modalSlice";
 import {
   useFetchDataFromDbQuery,
@@ -17,7 +18,11 @@ import React, { useState, useEffect } from "react";
 import InputWithLabel from "./components/InputWithLabel";
 import Button from "../Button";
 import InputWithDeleteIcon from "./components/InputWithDeleteIcon";
-import { id } from '../../../utils/data'
+import { id } from "../../../utils/data";
+import { getSession } from "next-auth/react";
+import { collection, getDocs, addDoc } from "firebase/firestore";
+import { db } from "@/components/app/utils/firebase";
+import { data } from "../../../utils/data";
 
 interface IAddBoardData {
   id: string;
@@ -42,7 +47,7 @@ let addBoardData = {
 };
 
 export default function AddOrEditBoardModal() {
-  let { data } = useFetchDataFromDbQuery();
+  let { data: storeData } = useFetchDataFromDbQuery();
   const [updateBoardToDb, { isLoading }] = useUpdateBoardToDbMutation();
   const modalVariant = useAppSelector(getAddOrEditBoardModalVariantValue);
   const isVariantAdd = modalVariant === "Add New Board";
@@ -58,6 +63,7 @@ export default function AddOrEditBoardModal() {
     useState<boolean>(false);
 
   const currentBoardTitle = useAppSelector(getPageTitle);
+  const currentBoardIndex = useAppSelector(getActiveBoardIndex);
   const dispatch = useAppDispatch();
 
   const isModalOpen = useAppSelector(getAddOrEditBoardModalValue);
@@ -65,8 +71,8 @@ export default function AddOrEditBoardModal() {
   const closeModal = () => dispatch(closeAddOrEditBoardModal());
 
   useEffect(() => {
-    if (data) {
-      const [boards] = data;
+    if (storeData) {
+      const [boards] = storeData;
       if (boards) {
         const activeBoards = boards.boards.map(
           (board: { name: string }) => board.name
@@ -77,13 +83,14 @@ export default function AddOrEditBoardModal() {
       if (isVariantAdd) {
         setBoardData(addBoardData);
       } else {
-        const activeBoard = data[0]?.boards.find(
-          (board: { name: string }) => board.name === currentBoardTitle
+        const activeBoard = storeData[0]?.boards.find(
+          (board: { name: string }, index: number) =>
+            index === currentBoardIndex
         );
         setBoardData(activeBoard);
       }
     }
-  }, [data, modalVariant]);
+  }, [storeData, modalVariant]);
 
   // Effect to clear error messages after a 3 secs
   useEffect(() => {
@@ -106,15 +113,13 @@ export default function AddOrEditBoardModal() {
     return function (e: React.ChangeEvent<HTMLInputElement>) {
       // handle change for create new board modal
       if (boardData) {
-        const modifyColumns = boardData.columns.map(
-          (column) => {
-            const { id: columnId } = column
-            if (columnId === id) {
-              return { ...column, name: e.target.value };
-            }
-            return column;
+        const modifyColumns = boardData.columns.map((column) => {
+          const { id: columnId } = column;
+          if (columnId === id) {
+            return { ...column, name: e.target.value };
           }
-        );
+          return column;
+        });
         const modifiedColumn = { ...boardData, columns: modifyColumns };
         setBoardData(modifiedColumn);
       }
@@ -139,12 +144,10 @@ export default function AddOrEditBoardModal() {
 
   const handleDeleteColumn = (id: string) => {
     if (boardData) {
-      const filteredColumns = boardData.columns.filter(
-        (column) => {
-          const { id: columnId } = column;
-          return columnId !== id
-        }
-      );
+      const filteredColumns = boardData.columns.filter((column) => {
+        const { id: columnId } = column;
+        return columnId !== id;
+      });
       setBoardData({ ...boardData, columns: filteredColumns });
     }
   };
@@ -176,24 +179,56 @@ export default function AddOrEditBoardModal() {
       setBoardAlreadyExistsChecker(true);
     }
 
+    //verify that the board name and none of the column names are empty
     if (
       boardData?.name !== "" &&
       !emptyColumnStringChecker &&
       !boardAlreadyExists
     ) {
-      //verify that the board name and none of the column names are empty
-      if (data) {
-        let [boards] = data;
-        const addBoard = [...boards.boards, boardData];
-        boards = addBoard;
-        await updateBoardToDb(boards);
-        // find the index of the board recently added and it to the store
-        closeModal();
+      const session = await getSession();
+      if (session) {
+        const { user } = session;
+        if (user) {
+          const docRef = collection(db, `users/${user.email}/tasks`);
+          const getDos = await getDocs(docRef);
+  
+          if (getDos.docs.length > 0) {
+            if (storeData) {
+              let [boards] = storeData;
+              const addBoard = [...boards.boards, boardData];
+              boards = addBoard;
+           
+              await updateBoardToDb(boards);
+              // find the index of the board recently added and it to the store
+              dispatch(setActiveBoardIndex(currentBoardIndex + 1));
+              closeModal();
+            }
+          } else {
+            try {
+              await addDoc(docRef, data);
+              const querySnapshot = await getDocs(docRef);
+              let boardsFromDb = querySnapshot.docs.map((doc) => {
+                return doc.data();
+              });
+              storeData = boardsFromDb;
+              let [boards] = storeData;
+              const addBoard = [...boards.boards, boardData];
+              boards = addBoard;
+              await updateBoardToDb(boards);
+              // find the index of the board recently added and it to the store
+              dispatch(setActiveBoardIndex(0));
+              closeModal();
+            } catch (e) {
+              console.error("Error adding document: ", e);
+            }
+          }
+        }
+        // setGetUser(session.user);
       }
     }
   };
 
-  // function to compare prev data with new one before sending to the BE
+  // function to compare prev storeData with new one before sending to the BE
 
   function deepEqual(object1: any, object2: any) {
     const keys1 = Object.keys(object1);
@@ -202,36 +237,34 @@ export default function AddOrEditBoardModal() {
       const val1 = object1[key];
       const val2 = object2[key];
       const areArrays = Array.isArray(val1) && Array.isArray(val2);
-      if(areArrays) {
-        if(val1.length !== val2.length) {
-          return false
+      if (areArrays) {
+        if (val1.length !== val2.length) {
+          return false;
         }
 
         for (let i = 0; i < val1.length; i++) {
-            if (!deepEqual(val1[i], val2[i])) {      
-              return false;
-            }
+          if (!deepEqual(val1[i], val2[i])) {
+            return false;
           }
         }
-        if (!areArrays && val1 !== val2) {
-          return false
-        }
+      }
+      if (!areArrays && val1 !== val2) {
+        return false;
+      }
     }
     return true;
   }
 
-
   const handleEditBoard = async () => {
-
     //condition to run if the board name is empty
     if (boardData?.name === "") {
       setIsBoardNameEmpty(true);
     }
-    
+
     const emptyColumnStringChecker = boardData?.columns.some(
       (column) => column.name === ""
     );
-    
+
     //if any of the column names is empty, update the emptyColumnIndex with its index
     if (emptyColumnStringChecker) {
       const emptyColumn = boardData?.columns.findIndex(
@@ -240,28 +273,28 @@ export default function AddOrEditBoardModal() {
       setEmptyColumnIndex(emptyColumn);
     }
 
-    if (data) {
-     const [boards] = data;
-     const boardsCopy = [...boards.boards]; // create a copy of the data that is not read-only
-     const activeBoardIndex = boardsCopy.findIndex(
-       (board: { name: string }) => board.name === currentBoardTitle
-     );
+    if (storeData) {
+      const [boards] = storeData;
+      const boardsCopy = [...boards.boards]; // create a copy of the storeData that is not read-only
+      const activeBoardIndex = boardsCopy.findIndex(
+        (board: { name: string }) => board.name === currentBoardTitle
+      );
 
-     const activeBoard = { ...boards.boards[activeBoardIndex]};
-     const isTheSame = deepEqual(boardData, activeBoard)
+      const activeBoard = { ...boards.boards[activeBoardIndex] };
+      const isTheSame = deepEqual(boardData, activeBoard);
 
-     if (boardData?.name !== "" && !emptyColumnStringChecker && !isTheSame) {
-         const updatedBoard = {
-           ...boards.boards[activeBoardIndex],
-           name: boardData?.name,
-           columns: boardData?.columns,
-         };
-         boardsCopy[activeBoardIndex] = updatedBoard;
-         await updateBoardToDb(boardsCopy);
-         closeModal();
-       }
-    }   
-  }
+      if (boardData?.name !== "" && !emptyColumnStringChecker && !isTheSame) {
+        const updatedBoard = {
+          ...boards.boards[activeBoardIndex],
+          name: boardData?.name,
+          columns: boardData?.columns,
+        };
+        boardsCopy[activeBoardIndex] = updatedBoard;
+        await updateBoardToDb(boardsCopy);
+        closeModal();
+      }
+    }
+  };
 
   return (
     <CRUDModal isOpen={isModalOpen} onRequestClose={closeModal}>
@@ -296,17 +329,20 @@ export default function AddOrEditBoardModal() {
               <div className="pt-6">
                 {boardData.columns.length > 0 ? (
                   <>
-                    <label className='text-medium-grey text-sm' htmlFor="">Board Column</label>
+                    <label className="text-medium-grey text-sm" htmlFor="">
+                      Board Column
+                    </label>
                     {boardData &&
                       boardData.columns.map(
-                        (column: { name?: string, id: string }, index: number) => {
+                        (
+                          column: { name?: string; id: string },
+                          index: number
+                        ) => {
                           let { name, id } = column;
                           return (
                             <div key={index} className="pt-2 relative">
                               <InputWithDeleteIcon
-                                onChange={(e) =>
-                                  handleColumnNameChange(id)(e)
-                                }
+                                onChange={(e) => handleColumnNameChange(id)(e)}
                                 onDelete={() => handleDeleteColumn(id)}
                                 value={name!}
                                 placeholder="e.g Done"

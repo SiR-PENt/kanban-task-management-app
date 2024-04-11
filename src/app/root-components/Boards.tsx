@@ -7,6 +7,7 @@ import {
 } from "@/components/redux/services/apiSlice";
 import { useAppSelector, useAppDispatch } from "@/components/redux/hooks";
 import {
+  getActiveBoardIndex,
   getPageTitle,
   openAddOrEditBoardModal,
 } from "@/components/redux/features/modalSlice";
@@ -20,6 +21,7 @@ import { useTheme } from "next-themes";
 import { StrictModeDroppable as Droppable } from "./StrictModeDroppable";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import DeleteBoardOrTaskModal from "./ui/Modals/DeleteBoardOrTask";
 
 export interface ISubtask {
   id: string;
@@ -44,27 +46,27 @@ interface Column {
 export default function Boards() {
   const [columns, setColumns] = useState<Column[]>([]);
   const { theme } = useTheme();
-  const activeBoard = useAppSelector(getPageTitle);
-  const { data, isLoading } = useFetchDataFromDbQuery();
+  const currentBoardIndex = useAppSelector(getActiveBoardIndex);
+  const pageTitle = useAppSelector(getPageTitle);
+  let { data, isLoading } = useFetchDataFromDbQuery();
   const [updateBoardToDb] = useUpdateBoardToDbMutation();
   const initialRender = useRef(true);
   const dispatch = useAppDispatch();
 
-  useEffect(() => { 
-      if (data && data?.length > 0) {
-        const [boards] = data;
-        if (boards) {
-          const activeBoardData = boards.boards.find(
-            (board: { name: string }) => board.name === activeBoard
-          );
-          if (activeBoardData) {
-            const { columns } = activeBoardData;
-            setColumns(columns);       
-          }
+  useEffect(() => {
+    if (data) {
+      const [boards] = data!;
+      if (boards) {
+        const activeBoardData = boards.boards.find(
+          (board: { name: string }) => board.name === pageTitle
+        );
+        if (activeBoardData) {
+          const { columns } = activeBoardData;
+          setColumns(columns);
         }
       }
-    
-  }, [ data, activeBoard]);
+    }
+  }, [data, pageTitle, currentBoardIndex ]);
 
   useEffect(() => {
     // Check if it's the initial render, to avoid sending the data to the backend on mount
@@ -74,14 +76,11 @@ export default function Boards() {
         if (data) {
           const [boards] = data;
           const boardsCopy = [...boards.boards];
-          const activeBoardIndex = boardsCopy.findIndex(
-            (board: { name: string }) => board.name === activeBoard
-          );
           const updatedBoard = {
-            ...boards.boards[activeBoardIndex],
+            ...boards.boards[currentBoardIndex],
             columns,
           };
-          boardsCopy[activeBoardIndex] = updatedBoard;
+          boardsCopy[currentBoardIndex] = updatedBoard;
           updateBoardToDb(boardsCopy);
         }
       } catch (error) {
@@ -112,18 +111,17 @@ export default function Boards() {
     const destinationColumn = newColumns.find(
       (col) => col.id === destination.droppableId
     );
-   
+
     // Task that was dragged
     const itemMoved = newColumns[sourceColumnIndex]?.tasks[source.index];
 
     // Remove from its source
     newColumns[sourceColumnIndex].tasks.splice(source.index, 1);
     // Insert into its destination
-    newColumns[destinationColumnIndex].tasks.splice(
-      destination.index,
-      0,
-      { ...itemMoved, status: destinationColumn!.name }
-    );
+    newColumns[destinationColumnIndex].tasks.splice(destination.index, 0, {
+      ...itemMoved,
+      status: destinationColumn!.name,
+    });
     // Update the state
     setColumns(newColumns);
   };
@@ -152,62 +150,84 @@ export default function Boards() {
         </SkeletonTheme>
       ) : (
         <>
-          {columns.length > 0 ? (
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <div className="flex space-x-6">
-                {columns.map((column, index) => {
-                  const { name, tasks, id } = column;
-                  return (
-                    <div key={index} className="w-[17.5rem] shrink-0">
-                      <p>{`${name} (${tasks ? tasks?.length : 0})`}</p>
-                      <Droppable droppableId={id}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className="h-full"
-                          >
-                            {tasks &&
-                              (tasks.length > 0 ? (
-                                <Tasks tasks={tasks!} />
-                              ) : (
-                                <div className="mt-6 h-full rounded-md border-dashed border-4 border-medium-grey" />
-                              ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </div>
-                  );
-                })}
-                {columns.length < 7 ? (
-                  <div
-                    onClick={() =>
-                      dispatch(openAddOrEditBoardModal("Edit Board"))
-                    }
-                    className="cursor-pointer rounded-md bg-light-hovered dark:bg-dark-grey hover:text-main-purple w-[17.5rem] mt-12 shrink-0 flex justify-center items-center shadow-sm"
-                  >
-                    <p className="font-bold text-2xl">+ New Column</p>
+          {     
+          (data![0]?.boards.length > 0) ? (
+            <>
+              {(columns.length > 0) ? (
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <div className="flex space-x-6">
+                    {columns.map((column, index) => {
+                      const { name, tasks, id } = column;
+                      return (
+                        <div key={index} className="w-[17.5rem] shrink-0">
+                          <p>{`${name} (${tasks ? tasks?.length : 0})`}</p>
+                          <Droppable droppableId={id}>
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                className="h-full"
+                              >
+                                {tasks &&
+                                  (tasks.length > 0 ? (
+                                    <Tasks tasks={tasks!} />
+                                  ) : (
+                                    <div className="mt-6 h-full rounded-md border-dashed border-4 border-medium-grey" />
+                                  ))}
+                                {provided.placeholder}
+                              </div>
+                            )}
+                          </Droppable>
+                        </div>
+                      );
+                    })}
+                    {columns.length < 7 ? (
+                      <div
+                        onClick={() =>
+                          dispatch(openAddOrEditBoardModal("Edit Board"))
+                        }
+                        className="cursor-pointer rounded-md bg-light-hovered dark:bg-dark-grey hover:text-main-purple w-[17.5rem] mt-12 shrink-0 flex justify-center items-center shadow-sm"
+                      >
+                        <p className="font-bold text-2xl">+ New Column</p>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                ) : (
-                  ""
-                )}
-              </div>
-            </DragDropContext>
+                </DragDropContext>
+              ) : (
+                <div className="w-full h-full flex justify-center items-center">
+                  <div className="flex flex-col items-center">
+                    <p className="dark:text-medium-grey text-sm text-center">
+                      This board is empty. Create a new column to get started.
+                    </p>
+                    <button
+                      onClick={() =>
+                        dispatch(openAddOrEditBoardModal("Edit Board"))
+                      }
+                      className="bg-main-purple transition ease-in duration-150 delay-150 dark:hover:bg-primary text-white px-4 py-2 flex mt-6 rounded-3xl items-center space-x-2"
+                    >
+                      <Image src={addTask} alt="icon-add-task" />
+                      <p>Add New Column</p>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
             <div className="w-full h-full flex justify-center items-center">
               <div className="flex flex-col items-center">
                 <p className="dark:text-medium-grey text-sm text-center">
-                  This board is empty. Create a new column to get started.
+                  You haven&apos;t created a board yet. Create a new board to get started.
                 </p>
                 <button
                   onClick={() =>
-                    dispatch(openAddOrEditBoardModal("Edit Board"))
+                    dispatch(openAddOrEditBoardModal("Add New Board"))
                   }
                   className="bg-main-purple transition ease-in duration-150 delay-150 dark:hover:bg-primary text-white px-4 py-2 flex mt-6 rounded-3xl items-center space-x-2"
                 >
                   <Image src={addTask} alt="icon-add-task" />
-                  <p>Add New Column</p>
+                  <p>Create New Board</p>
                 </button>
               </div>
             </div>

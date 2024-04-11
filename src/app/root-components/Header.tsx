@@ -13,6 +13,7 @@ import {
   openNavModal,
   getPageTitle,
   openAddOrEditTaskModal,
+  getActiveBoardIndex,
 } from "@/components/redux/features/modalSlice";
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import BoardDropdown from "./Dropdown";
@@ -30,10 +31,12 @@ interface Column {
 export default function MobileNavbar() {
   const dispatch = useAppDispatch();
   const pageTitle = useAppSelector(getPageTitle);
+  const currentBoardIndex = useAppSelector(getActiveBoardIndex);
   const openModal = () => dispatch(openNavModal());
   const [show, setShow] = useState<boolean>(false);
   const { data } = useFetchDataFromDbQuery();
   const [columns, setColumns] = useState<Column[]>([]);
+
 
   useEffect(() => {
     if (data !== undefined) {
@@ -92,7 +95,7 @@ export default function MobileNavbar() {
           <button onClick={() => setShow(!show)}>
             <Image src={ellipsis} alt="icon-vertical-ellipsis" />
           </button>
-          <BoardDropdown setShow={setShow} show={ show } />
+          <BoardDropdown setShow={setShow} show={show} />
         </div>
       </div>
       <NavModal />
@@ -139,7 +142,7 @@ export function TabletNavbar() {
 
       <div className="border-b-2 dark:border-lines-dark flex justify-between w-full items-center pr-[2.12rem]">
         <p className="text-black dark:text-white text-2xl font-bold pl-6">
-          {pageTitle}
+          {pageTitle ? pageTitle : 'Empty board'}
         </p>
 
         <div className="flex items-center space-x-3">

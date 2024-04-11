@@ -38,7 +38,7 @@ export default function NavModal() {
       );
       dispatch(setPageTitle(activeBoard?.name));
     }
-  }, [ data ]);
+  }, [ data, currentBoardIndex ]);
 
   return (
     <Modal isOpen={isNavModalOpen} onRequestClose={closeModal}>
