@@ -160,7 +160,7 @@ export function TabletNavbar() {
 
       <div className="border-b-2 dark:border-lines-dark flex justify-between w-full items-center pr-[2.12rem]">
           {!isLoading ? (
-            <p className="text-black dark:text-white text-xl font-bold pl-6">
+            <p className="text-black dark:text-white text-xl font-bold pl-6 capitalize">
               {pageTitle ? pageTitle : 'No board(s) yet'}
             </p>
           ) : (

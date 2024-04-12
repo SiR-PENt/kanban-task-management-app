@@ -84,7 +84,7 @@ export default function AddOrEditBoardModal() {
         setBoardData(addBoardData);
       } else {
         const activeBoard = storeData[0]?.boards.find(
-          (board: { name: string }, index: number) =>
+          (_board: { name: string }, index: number) =>
             index === currentBoardIndex
         );
         setBoardData(activeBoard);
@@ -199,8 +199,11 @@ export default function AddOrEditBoardModal() {
               boards = addBoard;
            
               await updateBoardToDb(boards);
+              if(currentBoardIndex === 0) dispatch(setActiveBoardIndex(currentBoardIndex));
               // find the index of the board recently added and it to the store
-              dispatch(setActiveBoardIndex(currentBoardIndex + 1));
+              else {
+                dispatch(setActiveBoardIndex(currentBoardIndex + 1));
+              }
               closeModal();
             }
           } else {

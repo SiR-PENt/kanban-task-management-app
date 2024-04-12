@@ -66,6 +66,9 @@ export default function Boards() {
           const { columns } = activeBoardData;
           setColumns(columns);
         }
+        else {
+          dispatch(setPageTitle(''));
+        }
       }
     }
   }, [data, pageTitle ]);
