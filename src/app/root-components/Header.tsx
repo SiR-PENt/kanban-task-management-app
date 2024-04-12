@@ -13,7 +13,6 @@ import {
   openNavModal,
   getPageTitle,
   openAddOrEditTaskModal,
-  getActiveBoardIndex,
 } from "@/components/redux/features/modalSlice";
 import { useFetchDataFromDbQuery } from "@/components/redux/services/apiSlice";
 import BoardDropdown from "./Dropdown";
@@ -22,6 +21,8 @@ import DeleteBoardOrTaskModal from "./ui/Modals/DeleteBoardOrTask";
 import navbarLogoDark from "../../../public/navbar-logo-dark.png";
 import navbarLogoLight from "../../../public/navbar-logo-light.png";
 import { useTheme } from "next-themes";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 interface Column {
   name: string;
@@ -34,9 +35,9 @@ export default function MobileNavbar() {
   // const currentBoardIndex = useAppSelector(getActiveBoardIndex);
   const openModal = () => dispatch(openNavModal());
   const [show, setShow] = useState<boolean>(false);
-  const { data } = useFetchDataFromDbQuery();
+  const { data, isLoading } = useFetchDataFromDbQuery();
   const [columns, setColumns] = useState<Column[]>([]);
-
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (data !== undefined) {
@@ -62,9 +63,26 @@ export default function MobileNavbar() {
           onClick={openModal}
           className="flex space-x-2 items-center cursor-pointer"
         >
-          <p className="text-black dark:text-white text-xl font-bold">
-            {pageTitle}
-          </p>
+          {" "}
+          {!isLoading ? (
+            <p className="text-black dark:text-white text-xl font-bold pl-6">
+              {pageTitle ? pageTitle : "No board(s) yet"}
+            </p>
+          ) : (
+            <SkeletonTheme
+              baseColor={theme === "dark" ? "#2b2c37" : "#e4ebfa"}
+              highlightColor={theme == "dark" ? "#444" : "#F4F7FD"}
+            >
+              <p>
+                <Skeleton
+                  borderRadius={"0.25rem"}
+                  height={40}
+                  width={"100%"}
+                  count={4}
+                />
+              </p>
+            </SkeletonTheme>
+          )}
           <Image
             src={chevronDown}
             alt="chevron-down"
@@ -112,7 +130,7 @@ export function TabletNavbar() {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState<boolean>(false);
 
-  const { data } = useFetchDataFromDbQuery();
+  const { data, isLoading } = useFetchDataFromDbQuery();
   const [columns, setColumns] = useState<Column[]>([]);
 
   useEffect(() => {
@@ -141,9 +159,25 @@ export function TabletNavbar() {
       </div>
 
       <div className="border-b-2 dark:border-lines-dark flex justify-between w-full items-center pr-[2.12rem]">
-        <p className="text-black dark:text-white text-2xl font-bold pl-6">
-          {pageTitle ? pageTitle : 'Empty board'}
-        </p>
+          {!isLoading ? (
+            <p className="text-black dark:text-white text-xl font-bold pl-6">
+              {pageTitle ? pageTitle : 'No board(s) yet'}
+            </p>
+          ) : (
+            <SkeletonTheme
+              baseColor={theme === "dark" ? "#2b2c37" : "#e4ebfa"}
+              highlightColor={theme == "dark" ? "#444" : "#F4F7FD"}
+            >
+              <p>
+                <Skeleton
+                  borderRadius={"0.25rem"}
+                  height={40}
+                  width={"100%"}
+                  count={4}
+                />
+              </p>
+            </SkeletonTheme>
+          )}
 
         <div className="flex items-center space-x-3">
           <button
