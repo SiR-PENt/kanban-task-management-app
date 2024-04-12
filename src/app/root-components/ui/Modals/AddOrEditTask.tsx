@@ -208,7 +208,7 @@ export default function AddOrEditTaskModal() {
 
   const handleEditTaskToDb = async (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const { title, status, description, subtasks } = taskData!;
+    const { id, title, status, description, subtasks } = taskData!;
 
     if (!title) {
       setIsTaskTitleEmpty(true);
@@ -245,9 +245,9 @@ export default function AddOrEditTaskModal() {
           const updatedStatusColumn = {
             ...columns[getStatusColumnIndex],
             tasks: columns[getStatusColumnIndex]?.tasks?.map(
-              (task: {id: string}, index: number) => {
-                if (id === currentTaskId) {
-                  return { id:id(), title, status, description, subtasks };
+              (task: {id: string}) => {
+                if (task.id === currentTaskId) {
+                  return { id , title, status, description, subtasks };
                 }
                 return task;
               }
@@ -279,7 +279,7 @@ export default function AddOrEditTaskModal() {
           const updatedPrevStatusColumn = {
             ...getPrevStatusColumn,
             tasks: getPrevStatusColumn?.tasks.filter(
-              (task: {id: string }) => id !== currentTaskId
+              (task: {id: string }) => task.id !== currentTaskId
             ),
           };
           // update the new column of the task
@@ -287,7 +287,7 @@ export default function AddOrEditTaskModal() {
             ...getStatusColumn,
             tasks: [
               ...getStatusColumn?.tasks,
-              { id: id(), title, status, description, subtasks },
+              { id, title, status, description, subtasks },
             ],
           };
           const columnsCopy = [...columns];

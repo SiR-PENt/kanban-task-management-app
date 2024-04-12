@@ -197,7 +197,7 @@ export default function AddOrEditBoardModal() {
               let [boards] = storeData;
               const addBoard = [...boards.boards, boardData];
               boards = addBoard;
-           
+              console.log(boards)
               await updateBoardToDb(boards);
               if(currentBoardIndex === 0) dispatch(setActiveBoardIndex(currentBoardIndex));
               // find the index of the board recently added and it to the store

@@ -173,7 +173,7 @@ export function TabletNavbar() {
                   borderRadius={"0.25rem"}
                   height={40}
                   width={"100%"}
-                  count={4}
+                  count={1}
                 />
               </p>
             </SkeletonTheme>
